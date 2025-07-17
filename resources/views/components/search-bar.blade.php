@@ -24,7 +24,7 @@
     });
 </script>
 --}}
-<div class="w-full bg-[#F5F5F5] flex justify-center items-center h-[282px] " x-data="filtroSubcategorias">
+<div class="w-full bg-[#F5F5F5] flex justify-center items-center h-fit py-10" x-data="filtroSubcategorias">
     <form action="{{ route('productos') }}" method="GET"
         class="w-[1200px] mx-auto bg-white shadow-lg rounded-lg flex flex-col text-[#6E7173] font-semibold text-[16px] h-[231px] px-4 justify-evenly">
         <div class="flex flex-col gap-3">

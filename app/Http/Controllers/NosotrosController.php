@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Banner;
 use App\Models\Nosotros;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -17,10 +18,8 @@ class NosotrosController extends Controller
         $nosotros = Nosotros::first();
 
 
-
         return Inertia::render('admin/nosotrosAdmin', ['nosotros' => $nosotros]);
     }
-
 
 
     /**
@@ -37,6 +36,7 @@ class NosotrosController extends Controller
         $data = $request->validate([
             'title' => 'sometimes|string|max:255',
             'text' => 'sometimes',
+            'video' => 'sometimes|nullable|file',
             'image' => 'sometimes|file',
         ]);
 
@@ -55,6 +55,21 @@ class NosotrosController extends Controller
             $data['image'] = $request->file('image')->store('slider', 'public');
         }
 
+        if ($request->hasFile('video') && $nosotros) {
+            // Guardar la ruta del archivo antiguo para eliminarlo después
+            $oldVideoPath = $nosotros->getRawOriginal('video');
+
+            // Guardar el nuevo archivo
+            $data['video'] = $request->file('video')->store('slider', 'public');
+
+            // Eliminar el archivo antiguo si existe
+            if ($oldVideoPath && Storage::disk('public')->exists($oldVideoPath)) {
+                Storage::disk('public')->delete($oldVideoPath);
+            }
+        } else if ($request->hasFile('video') && !$nosotros) {
+            $data['video'] = $request->file('video')->store('slider', 'public');
+        }
+
         if (!$nosotros) {
             // Si no existe, crear una nueva entrada
             $nosotros = Nosotros::create($data);
@@ -64,5 +79,12 @@ class NosotrosController extends Controller
         $nosotros->update($data);
 
         return redirect()->back()->with('success', 'Nosotros updated successfully.');
+    }
+
+    public function nosotrosBanner()
+    {
+        $nosotros = Banner::where('name', 'nosotros')->first();
+
+        return Inertia::render('admin/nosotrosBanner', ['nosotros' => $nosotros]);
     }
 }

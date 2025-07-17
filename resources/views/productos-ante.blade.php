@@ -1,6 +1,6 @@
 @extends('layouts.default')
 
-@section('title', 'Empresa - Autopartes TB')
+@section('title', 'Autopartes TB')
 
 @section('content')
     <div class="relative flex h-[250px] w-full items-end justify-center sm:h-[300px] md:h-[400px]">
@@ -13,8 +13,8 @@
                 Inicio
             </a>
             /
-            <a href="{{ route('nosotros') }}">
-                Nosotros
+            <a href="{{ route('productos') }}">
+                Productos
             </a>
         </div>
 
@@ -22,28 +22,25 @@
             alt="Banner nosotros" />
 
         <h2 class="absolute z-10 mx-auto w-[1200px] pb-20 text-3xl font-bold text-white sm:text-4xl">
-            Nosotros
+            Productos
         </h2>
     </div>
-    <div
-        class="mx-auto flex w-full max-w-[1200px] h-full flex-col gap-6 px-4 py-10 sm:gap-8 sm:py-16 lg:flex-row lg:gap-10 lg:px-0 lg:py-20">
-        <div class="h-full w-full py-4 lg:py-10">
-            <div class="flex flex-col gap-4 lg:gap-6">
-                <h2 class="text-2xl font-bold sm:text-3xl">{{ $nosotros->title ?? null }}</h2>
-                <div class="" {!! $nosotros->text ?? null !!}></div>
-            </div>
-        </div>
-        <div class="h-[514px] w-full ">
-            <img class="h-full w-full object-cover" src="{{ $nosotros->image ?? null }}" alt="Imagen nosotros">
-        </div>
+
+    <x-search-bar />
+
+    <div class="w-[1200px] mx-auto grid grid-cols-4 gap-5 my-10">
+        @foreach ($categorias as $categoria)
+            <a href="{{url("/productos/" . $categoria->id)}}"
+                class="h-[350px] max-w-[288px] border flex flex-col rounded-lg shadow-sm">
+                <div class="w-full min-h-[250px] rounded-t-lg">
+                    <img src="{{ $categoria->image ?? "" }}" alt="{{ $categoria->name ?? ""}}"
+                        class="h-full w-full object-cover rounded-t-lg">
+                </div>
+                <div class="w-full h-full flex justify-center items-center border-t border-[1px] px-2">
+                    <p class="text-primary-orange text-lg font-bold uppercase">{{ $categoria->name ?? "" }}</p>
+                </div>
+            </a>
+        @endforeach
 
     </div>
-
-    <div className="max-w-[1200px] mx-auto flex justify-center h-[688px]">
-        <video className="w-full h-full object-cover rounded-lg" src="{{$nosotros->video}}" controls></video>
-    </div>
-
-
-
-
 @endsection

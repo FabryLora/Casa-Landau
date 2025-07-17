@@ -14,6 +14,7 @@ use App\Http\Controllers\ListaDePreciosController;
 use App\Http\Controllers\LogosController;
 use App\Http\Controllers\MarcaController;
 use App\Http\Controllers\MarcaProductoController;
+use App\Http\Controllers\MaterialesController;
 use App\Http\Controllers\MetadatosController;
 use App\Http\Controllers\NosotrosController;
 use App\Http\Controllers\NovedadesController;
@@ -26,6 +27,7 @@ use App\Http\Controllers\SubProductoController;
 use App\Http\Controllers\SucursalController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ValoresController;
+use App\Models\Banner;
 use App\Models\InformacionImportante;
 use Illuminate\Support\Facades\Auth;
 
@@ -51,6 +53,7 @@ Route::middleware('auth:admin')->group(function () {
     Route::post('admin/nosotros/update', [NosotrosController::class, 'update'])->name('admin.nosotros.update');
     Route::get('admin/valores', [ValoresController::class, 'index'])->name('admin.valores');
     Route::post('admin/valores', [ValoresController::class, 'update'])->name('admin.valores.update');
+    Route::get('admin/nosotros-banner', [NosotrosController::class, 'nosotrosBanner'])->name('admin.nosotros.banner');
 
     # Categorias
     Route::get('admin/categorias', [CategoriaController::class, 'index'])->name('admin.categorias');
@@ -94,7 +97,28 @@ Route::middleware('auth:admin')->group(function () {
 
     Route::post('cambiarOferta', [ProductoController::class, 'cambiarOferta'])->name('cambiarOferta');
 
+    Route::post('dashboard/banners', function (Request $request) {
+        $banner = Banner::where('name', $request->name)->first();
 
+        $data = $request->validate([
+            'name' => 'sometimes|string|max:255',
+            'image' => 'required|file',
+        ]);
+
+        if ($banner) {
+            // Delete the old image if it exists
+            if ($banner->image) {
+                $absolutePath = public_path('storage/' . $banner->image);
+                if (file_exists($absolutePath)) {
+                    unlink($absolutePath);
+                }
+            }
+            // Store the new image
+            $data['image'] = $request->file('image')->store('images', 'public');
+        }
+
+        $banner->update($data);
+    })->name('admin.banners.update');
 
 
     Route::get('admin/contacto', [ContactoController::class, 'index'])->name('admin.contacto');
@@ -168,6 +192,11 @@ Route::middleware('auth:admin')->group(function () {
 
     Route::get('admin/informacion-de-pago', [InformacionDePagoController::class, 'index'])->name('admin.informacion-de-pago');
     Route::post('admin/informacion-de-pago', [InformacionDePagoController::class, 'update'])->name('admin.informacion-de-pago.update');
+
+    Route::get('admin/materiales', [MaterialesController::class, 'index'])->name('admin.materiales');
+    Route::post('admin/materiales', [MaterialesController::class, 'store'])->name('admin.materiales.store');
+    Route::post('admin/materiales/update', [MaterialesController::class, 'update'])->name('admin.materiales.update');
+    Route::delete('admin/materiales/destroy', [MaterialesController::class, 'destroy'])->name('admin.materiales.destroy');
 
     Route::get('/admin/dashboard', function () {
         if (!Auth::guard('admin')->check()) {

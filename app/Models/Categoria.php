@@ -8,6 +8,11 @@ class Categoria extends Model
 {
     protected $guarded = [];
 
+    public function getImageAttribute($value)
+    {
+        return url("storage/" . $value);
+    }
+
     public function productos()
     {
         return $this->hasMany(Producto::class)->orderBy('order');

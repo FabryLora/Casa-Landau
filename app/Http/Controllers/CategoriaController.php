@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Categoria;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 
 class CategoriaController extends Controller
@@ -16,7 +17,7 @@ class CategoriaController extends Controller
 
         $perPage = $request->input('per_page', 10);
 
-        $query = Categoria::query()->orderBy('order', direction: 'asc');
+        $query = Categoria::query()->orderBy('order', 'asc');
 
         if ($request->has('search') && !empty($request->search)) {
             $searchTerm = $request->search;
@@ -42,7 +43,15 @@ class CategoriaController extends Controller
         $data = $request->validate([
             'order' => 'nullable|sometimes|string',
             'name' => 'required|string|max:255',
+            'image' => 'sometimes|file|nullable',
         ]);
+
+        // Check if the image is provided and store it
+        if ($request->hasFile('image')) {
+            $data['image'] = $request->file('image')->store('images', 'public');
+        } else {
+            $data['image'] = null; // Set to null if no image is provided
+        }
 
 
         // Create the category
@@ -67,7 +76,19 @@ class CategoriaController extends Controller
         $data = $request->validate([
             'order' => 'sometimes|string',
             'name' => 'sometimes|string|max:255',
+            'image' => 'sometimes|file|nullable',
         ]);
+
+        // Check if the image is provided and store it
+        if ($request->hasFile('image')) {
+            // If an image is provided, delete the old one if it exists
+            if ($categoria->getRawOriginal('image')) {
+                Storage::disk('public')->delete($categoria->getRawOriginal('image'));
+            }
+            $data['image'] = $request->file('image')->store('images', 'public');
+        } else {
+            $data['image'] = $categoria->getRawOriginal('image'); // Keep the old image if no new one is provided
+        }
 
 
 
@@ -87,6 +108,11 @@ class CategoriaController extends Controller
         // Check if the category entry exists
         if (!$categoria) {
             return redirect()->back()->with('error', 'Category not found.');
+        }
+
+        // If an image is associated with the category, delete it
+        if ($categoria->getRawOriginal('image')) {
+            Storage::disk('public')->delete($categoria->getRawOriginal('image'));
         }
 
 

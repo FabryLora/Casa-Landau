@@ -10,6 +10,7 @@ export default function MarcasAdmin() {
 
     const { data, setData, post, reset, errors } = useForm({
         title: '',
+        subtitle: '',
     });
 
     const [searchTerm, setSearchTerm] = useState('');
@@ -72,6 +73,20 @@ export default function MarcasAdmin() {
                                             onChange={(e) => setData('title', e.target.value)}
                                         />
                                         {errors.title && <p className="mt-1 text-xs text-red-500">{errors.title}</p>}
+
+                                        <label htmlFor="nombree">
+                                            Sub-titulo <span className="text-red-500">*</span>
+                                        </label>
+                                        <input
+                                            className={`focus:outline-primary-orange rounded-md p-2 outline outline-gray-300 focus:outline ${
+                                                errors.subtitle ? 'outline-red-500' : ''
+                                            }`}
+                                            type="text"
+                                            name="nombree"
+                                            id="nombree"
+                                            onChange={(e) => setData('subtitle', e.target.value)}
+                                        />
+                                        {errors.subtitle && <p className="mt-1 text-xs text-red-500">{errors.subtitle}</p>}
 
                                         <label htmlFor="link">Link</label>
                                         <input
@@ -147,6 +162,7 @@ export default function MarcasAdmin() {
                                 <tr>
                                     <td className="text-center">ORDEN</td>
                                     <td className="text-center">TITULO</td>
+                                    <td className="text-center">SUB-TITULO</td>
                                     <td className="text-center">LINK</td>
                                     <td className="w-[400px] px-3 py-2 text-center">MULTIMEDIA</td>
                                     <td className="text-center">EDITAR</td>

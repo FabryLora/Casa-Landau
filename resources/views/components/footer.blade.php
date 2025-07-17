@@ -1,5 +1,5 @@
 {{-- resources/views/components/footer.blade.php --}}
-<div class="flex h-fit w-full flex-col bg-[#4D565D]">
+<div class="flex h-fit w-full flex-col bg-primary-orange">
     <div
         class="mx-auto flex h-full w-full max-w-[1200px] flex-col items-center justify-between gap-20 px-4 py-10 lg:flex-row lg:items-start  lg:px-0 lg:py-26">
         {{-- Logo y redes sociales --}}
@@ -27,7 +27,7 @@
         <div class="hidden flex-col  gap-10 lg:flex">
             <h2 class="text-lg font-bold text-white">Secciones</h2>
             <div class="grid h-fit grid-flow-col grid-cols-2 grid-rows-3 gap-x-20 gap-y-3">
-                <a href="{{ route('empresa') }}" class="text-[15px] text-white/80">Empresa</a>
+                <a href="{{ route('nosotros') }}" class="text-[15px] text-white/80">Empresa</a>
                 <a {{-- href="{{ route('productos') }}" --}} class="text-[15px] text-white/80">Productos</a>
                 <a href="{{ route('calidad') }}" class="text-[15px] text-white/80">Calidad</a>
                 <a href="{{ route('lanzamientos') }}" class="text-[15px] text-white/80">Lanzamientos</a>
@@ -49,7 +49,7 @@
 
         {{-- Newsletter --}}
         <div class="flex h-full flex-col items-center gap-6 lg:items-start lg:gap-10">
-            <h2 class="text-lg font-bold text-white">Suscribite al Newsletter</h2>
+            <h2 class="text-lg font-bold text-white uppercase">Suscribite al Newsletter</h2>
 
             {{-- Mensaje de confirmación --}}
             <div id="newsletter-success"
@@ -66,10 +66,10 @@
 
             {{-- Formulario del newsletter --}}
             <form id="newsletter-form" {{-- action="{{ route('newsletter.subscribe') }}" --}} method="POST"
-                class="flex h-[44px] w-full items-center justify-between border border-[#E0E0E0] bg-white px-4 sm:w-[287px]">
+                class="flex h-[44px] w-full items-center justify-between  outline outline-[#DFDFDF33] rounded-lg px-4 sm:w-[287px]">
                 @csrf
-                <input id="newsletter-email" name="email" type="email" required class="w-full outline-none"
-                    placeholder="Ingresa tu email" />
+                <input id="Email" name="email" type="email" required
+                    class="w-full outline-none placeholder:text-[#DFDFDF33]" placeholder="Ingresa tu email" />
                 <button type="submit" id="newsletter-btn">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
                         <path d="M1 8H15M15 8L8 1M15 8L8 15" stroke="#0072C6" stroke-width="2" stroke-linecap="round"
@@ -132,10 +132,10 @@
 
     {{-- Copyright --}}
     <div
-        class="flex min-h-[67px] w-full flex-col items-center justify-center bg-[#4D565D] px-4 py-4 text-[14px] text-white/80 sm:flex-row sm:justify-between sm:px-6 lg:px-0">
+        class="flex min-h-[67px] w-full flex-col items-center justify-center bg-[#3A4A9F] px-4 py-4 text-[14px] text-white/80 sm:flex-row sm:justify-between sm:px-6 lg:px-0">
         <div
             class="mx-auto flex w-full max-w-[1200px] flex-col items-center justify-center gap-2 text-center sm:flex-row sm:justify-between sm:gap-0 sm:text-left">
-            <p>© Copyright {{ date('Y') }} Autopartes TB. Todos los derechos reservados</p>
+            <p>© Copyright {{ date('Y') }} Casa landau. Todos los derechos reservados</p>
             <a target="_blank" rel="noopener noreferrer" href="https://osole.com.ar/" class="mt-2 sm:mt-0">
                 By <span class="font-bold">Osole</span>
             </a>

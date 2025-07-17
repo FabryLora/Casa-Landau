@@ -1,12 +1,21 @@
+import CustomReactQuill from '@/components/CustomReactQuill';
 import Dashboard from '@/pages/admin/dashboard';
 import { useForm, usePage } from '@inertiajs/react';
+import { useEffect, useState } from 'react';
 import { Toaster, toast } from 'react-hot-toast';
 export default function BannerPortadaAdmin() {
     const banner = usePage().props.banner;
 
     const { data, setData, errors, processing, post, reset } = useForm({
         title: banner?.title,
+        text: banner?.text,
     });
+
+    const [text, setText] = useState(banner?.text || '');
+
+    useEffect(() => {
+        setData('text', text);
+    }, [text]);
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -85,6 +94,10 @@ export default function BannerPortadaAdmin() {
                             </div>
                         </div>
                     </div>
+                    <label htmlFor="text" className="mt-4 block text-lg font-medium text-gray-900">
+                        Texto
+                    </label>
+                    <CustomReactQuill value={text} onChange={setText} />
                 </div>
 
                 <div className="flex items-center justify-start gap-x-6">

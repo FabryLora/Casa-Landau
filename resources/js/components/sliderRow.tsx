@@ -12,6 +12,7 @@ export default function SliderRow({ sliderObject }) {
     const updateForm = useForm({
         order: sliderObject?.order,
         title: sliderObject?.title,
+        subtitle: sliderObject?.subtitle,
         id: sliderObject?.id,
     });
 
@@ -49,6 +50,7 @@ export default function SliderRow({ sliderObject }) {
         <tr className={`border text-black odd:bg-gray-100 even:bg-white`}>
             <td className="align-middle">{sliderObject?.order}</td>
             <td className="h-[90px] align-middle">{sliderObject?.title}</td>
+            <td className="align-middle">{sliderObject?.subtitle}</td>
 
             <td className="align-middle">{sliderObject?.link}</td>
 
@@ -97,6 +99,18 @@ export default function SliderRow({ sliderObject }) {
                                         id="nombree"
                                         value={updateForm?.data?.title}
                                         onChange={(e) => updateForm.setData('title', e.target.value)}
+                                    />
+
+                                    <label htmlFor="nombree">
+                                        Sub-titulo <span className="text-red-500">*</span>
+                                    </label>
+                                    <input
+                                        className="focus:outline-primary-orange rounded-md p-2 outline outline-gray-300 focus:outline"
+                                        type="text"
+                                        name="nombree"
+                                        id="nombree"
+                                        value={updateForm?.data?.subtitle}
+                                        onChange={(e) => updateForm.setData('subtitle', e.target.value)}
                                     />
 
                                     <label htmlFor="link">Link</label>

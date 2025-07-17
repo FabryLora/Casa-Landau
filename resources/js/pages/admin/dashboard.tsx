@@ -9,7 +9,6 @@ import {
     faLock,
     faNewspaper,
     faShield,
-    faStar,
     faUser,
     faUsers,
 } from '@fortawesome/free-solid-svg-icons';
@@ -17,9 +16,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Head, Link, router, usePage } from '@inertiajs/react';
 import { useEffect, useState } from 'react';
 import { Toaster } from 'react-hot-toast';
-import logo from '../../../images/logos/logotb-azul.png';
-
-
+import logo from '../../../images/logos/logo.png';
 
 export default function Dashboard({ children }) {
     const { auth } = usePage().props;
@@ -52,12 +49,12 @@ export default function Dashboard({ children }) {
         {
             id: 'nosotros',
             open: false,
-            title: 'Empresa',
+            title: 'Nosotros',
             icon: faUsers,
             href: 'nosotros',
             subHref: [
+                { title: 'Banner', href: 'nosotros-banner' },
                 { title: 'Contenido', href: 'nosotros' },
-                { title: 'Valores', href: 'valores' },
             ],
         },
         {
@@ -67,27 +64,17 @@ export default function Dashboard({ children }) {
             icon: faBoxArchive,
             href: '#',
             subHref: [
-                { title: 'Marcas', href: 'categorias' },
-                { title: 'Modelos', href: 'subcategorias' },
+                { title: 'Categorias', href: 'categorias' },
+                { title: 'Rubros', href: 'subcategorias' },
                 { title: 'Productos', href: 'productos' },
                 { title: 'Lista de precios', href: 'listadeprecios' },
             ],
         },
-        {
-            id: 'calidad',
-            open: false,
-            title: 'Calidad',
-            icon: faStar,
-            href: 'calidad',
-            subHref: [
-                { title: 'Contenido', href: 'calidad' },
-                { title: 'Archivos', href: 'archivos' },
-            ],
-        },
+
         {
             id: 'lanzamientos',
             open: false,
-            title: 'Lanzamientos',
+            title: 'Novedades',
             icon: faNewspaper,
             href: 'novedades',
             subHref: [],
@@ -219,7 +206,7 @@ export default function Dashboard({ children }) {
                                     >
                                         <div className="flex flex-row items-center gap-2">
                                             <div className="flex h-4 w-4 items-center justify-center">
-                                                <FontAwesomeIcon size="sm" icon={drop.icon} color="#0072C6" />
+                                                <FontAwesomeIcon size="sm" icon={drop.icon} color="#3A4A9F" />
                                             </div>
 
                                             <p>{drop.title}</p>
@@ -229,14 +216,14 @@ export default function Dashboard({ children }) {
                                             className={`transform transition-transform duration-200 ${drop.open ? 'rotate-90' : 'rotate-0'}`}
                                             size="xs"
                                             icon={faChevronRight}
-                                            color="#0072C6"
+                                            color="#3A4A9F"
                                         />
                                     </button>
                                 ) : (
                                     <Link href={drop.href} className="flex w-full flex-row items-center justify-between p-4">
                                         <div className="flex flex-row items-center gap-2">
                                             <div className="flex h-4 w-4 items-center justify-center">
-                                                <FontAwesomeIcon size="sm" icon={drop.icon} color="#0072C6" />
+                                                <FontAwesomeIcon size="sm" icon={drop.icon} color="#3A4A9F" />
                                             </div>
 
                                             <p>{drop.title}</p>

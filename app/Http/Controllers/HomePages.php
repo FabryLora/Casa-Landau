@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\ArchivoCalidad;
+use App\Models\Banner;
 use App\Models\BannerPortada;
 use App\Models\Calidad;
 use App\Models\Categoria;
@@ -47,13 +48,14 @@ class HomePages extends Controller
         ]);
     }
 
-    public function empresa()
+    public function nosotros()
     {
+        $banner = Banner::where('name', 'nosotros')->first();
         $nosotros = Nosotros::first();
-        $valores = Valores::first();
+
         return view('empresa', [
             'nosotros' => $nosotros,
-            'valores' => $valores,
+            'banner' => $banner,
         ]);
     }
 

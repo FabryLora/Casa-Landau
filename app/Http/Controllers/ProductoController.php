@@ -5,7 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Categoria;
 
 use App\Models\ImagenProducto;
-
+use App\Models\Materiales;
+use App\Models\Medidas;
 use App\Models\Metadatos;
 use App\Models\Producto;
 use App\Models\ProductoMarca;
@@ -53,7 +54,20 @@ class ProductoController extends Controller
         ]);
     }
 
-    public function indexVistaPrevia(Request $request)
+    public function productosAnteSala(Request $request)
+    {
+        $categorias = Categoria::orderBy('order', 'asc')->get();
+        $subcategorias = SubCategoria::orderBy('order', 'asc')->get();
+        /* $materiales = Materiales::orderBy('order', 'asc')->get(); */
+        /* $medidas = Medidas::orderBy('order', 'asc')->get(); */
+
+        return view('productos-ante', [
+            'categorias' => $categorias,
+            'subcategorias' => $subcategorias,
+        ]);
+    }
+
+    public function indexVistaPrevia(Request $request, $id)
     {
         // Construir query base para productos
         $query = Producto::query();
@@ -121,6 +135,7 @@ class ProductoController extends Controller
             'code_oem' => $request->code_oem,
             'desc_visible' => $request->desc_visible,
             'medida' => $request->medida,
+            'categoria_id' => $id
         ]);
     }
 

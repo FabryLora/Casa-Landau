@@ -19,10 +19,14 @@
                     <div
                         class="relative flex flex-col gap-4 sm:gap-6 lg:gap-19 max-sm:gap-3 w-full justify-center  max-sm:pb-16">
                         <div
-                            class="max-w-[320px] sm:max-w-[400px] lg:max-w-[480px] max-sm:max-w-full text-white flex flex-col gap-5 max-sm:gap-3">
-                            <h1 class="text-[46px] max-sm:text-[20px] font-bold w-[727px] max-sm:w-full">
-                                {{ $slider->title }}
-                            </h1>
+                            class="max-w-[320px] sm:max-w-[400px] lg:max-w-[480px] max-sm:max-w-full text-white flex flex-col gap-10 max-sm:gap-3">
+                            <div class="flex flex-col">
+                                <h1 class="text-[46px] max-sm:text-[20px] font-bold w-[727px] max-sm:w-full">
+                                    {{ $slider->title }}
+                                </h1>
+                                <h3 class="text-[24px]">{{$slider->subtitle}}</h3>
+                            </div>
+
                             <a href="{{ $slider->link}}"
                                 class="flex justify-center items-center w-[163px] max-sm:w-[130px] h-[41px] max-sm:h-[36px] font-bold border border-white rounded-lg text-[16px] max-sm:text-[14px] hover:text-primary-orange hover:bg-white transition duration-300">Ver
                                 productos</a>

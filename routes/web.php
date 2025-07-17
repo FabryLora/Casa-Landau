@@ -15,14 +15,16 @@ use Inertia\Inertia;
 # ---------------------- Rutas de zona pública ---------------------- #
 
 Route::get('/', [HomePages::class, 'home'])->name('home');
-Route::get('/empresa', [HomePages::class, 'empresa'])->name('empresa');
+Route::get('/nosotros', [HomePages::class, 'nosotros'])->name('nosotros');
 Route::get('/calidad', [HomePages::class, 'calidad'])->name('calidad');
 Route::get('/lanzamientos', [HomePages::class, 'lanzamientos'])->name('lanzamientos');
 Route::get('/contacto', [HomePages::class, 'contacto'])->name('contacto');
 Route::get('/lanzamientos/{id}', [NovedadesController::class, 'novedadesShow'])->name('novedades');
 Route::post('/contacto/sendemail', [ContactoController::class, 'sendContact'])->name('send.contact');
 
-Route::get('/productos', [ProductoController::class, 'indexVistaPrevia'])->name('productos');
+Route::get('/productos', [ProductoController::class, 'productosAnteSala'])->name('productos');
+Route::get('/productos/{id}', [ProductoController::class, 'indexVistaPrevia'])->name('productos.categorias');
+
 Route::get('/p/{codigo}', [ProductoController::class, 'show'])->name('producto');
 
 Route::get('/busqueda', [ProductoController::class, 'SearchProducts'])->name('searchproducts');

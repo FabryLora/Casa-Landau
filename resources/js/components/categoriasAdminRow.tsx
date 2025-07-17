@@ -48,6 +48,9 @@ export default function CategoriasAdminRow({ categoria }) {
         <tr className={`border text-black odd:bg-gray-100 even:bg-white`}>
             <td className="align-middle">{categoria?.order}</td>
             <td className="h-[90px] align-middle">{categoria?.name}</td>
+            <td className="flex h-[90px] justify-center align-middle">
+                <img src={categoria?.image} className="" alt="" />
+            </td>
 
             <td className="w-[140px] text-center">
                 <div className="flex flex-row justify-center gap-3">
@@ -90,6 +93,14 @@ export default function CategoriasAdminRow({ categoria }) {
                                         id="nombree"
                                         value={updateForm?.data?.name}
                                         onChange={(e) => updateForm.setData('name', e.target.value)}
+                                    />
+
+                                    <label htmlFor="imagen">Imagen</label>
+                                    <input
+                                        type="file"
+                                        accept="image/*"
+                                        onChange={(e) => updateForm.setData('image', e.target.files[0])}
+                                        className="file:bg-primary-orange w-full rounded border p-2 file:cursor-pointer file:rounded-full file:px-4 file:py-2 file:text-white"
                                     />
 
                                     <div className="flex justify-end gap-4">

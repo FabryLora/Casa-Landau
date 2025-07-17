@@ -21,12 +21,12 @@ export default function CategoriasAdmin() {
         post(route('admin.categorias.store'), {
             preserveScroll: true,
             onSuccess: () => {
-                toast.success('Marca creada correctamente');
+                toast.success('Categoria creada correctamente');
                 reset();
                 setCreateView(false);
             },
             onError: (errors) => {
-                toast.error('Error al crear marca');
+                toast.error('Error al crear categoria');
                 console.log(errors);
             },
         });
@@ -75,7 +75,7 @@ export default function CategoriasAdmin() {
                         >
                             <form onSubmit={handleSubmit} method="POST" className="text-black">
                                 <div className="w-[500px] rounded-md bg-white p-4">
-                                    <h2 className="mb-4 text-2xl font-semibold">Crear Marca</h2>
+                                    <h2 className="mb-4 text-2xl font-semibold">Crear categoria</h2>
                                     <div className="flex flex-col gap-4">
                                         <label htmlFor="ordennn">Orden</label>
                                         <input
@@ -94,6 +94,15 @@ export default function CategoriasAdmin() {
                                             name="nombree"
                                             id="nombree"
                                             onChange={(e) => setData('name', e.target.value)}
+                                        />
+
+                                        <label htmlFor="imagen">Imagen</label>
+                                        <input
+                                            type="file"
+                                            multiple
+                                            accept="image/*"
+                                            onChange={(e) => setData('image', e.target.files[0])}
+                                            className="file:bg-primary-orange w-full rounded border p-2 file:cursor-pointer file:rounded-full file:px-4 file:py-2 file:text-white"
                                         />
 
                                         <div className="flex justify-end gap-4">
@@ -118,11 +127,11 @@ export default function CategoriasAdmin() {
                     )}
                 </AnimatePresence>
                 <div className="mx-auto flex w-full flex-col gap-3">
-                    <h2 className="border-primary-orange text-primary-orange text-bold w-full border-b-2 text-2xl">Marcas</h2>
+                    <h2 className="border-primary-orange text-primary-orange text-bold w-full border-b-2 text-2xl">Categorias</h2>
                     <div className="flex h-fit w-full flex-row gap-5">
                         <input
                             type="text"
-                            placeholder="Buscar marca..."
+                            placeholder="Buscar categoria..."
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
                             className="w-full rounded-md border border-gray-300 px-3"
@@ -137,7 +146,7 @@ export default function CategoriasAdmin() {
                             onClick={() => setCreateView(true)}
                             className="bg-primary-orange w-[200px] rounded px-4 py-1 font-bold text-white hover:bg-orange-400"
                         >
-                            Crear Marca
+                            Crear categoria
                         </button>
                     </div>
 
@@ -147,6 +156,7 @@ export default function CategoriasAdmin() {
                                 <tr>
                                     <td className="text-center">ORDEN</td>
                                     <td className="py-2 text-center">NOMBRE</td>
+                                    <td className="py-2 text-center">IMAGEN</td>
 
                                     <td className="text-center">EDITAR</td>
                                 </tr>

@@ -1,6 +1,6 @@
 import { Head, useForm } from '@inertiajs/react';
 // Assuming logo import works in your environment
-import logo from '../../../images/logos/logotb-azul.png';
+import logo from '../../../images/logos/logo.png';
 
 export default function AdminLogin() {
     const { data, setData, post, processing, errors } = useForm({
@@ -21,7 +21,7 @@ export default function AdminLogin() {
             </Head>
             <div className="font-roboto-condensed top-10 right-10 z-20 flex h-fit w-fit flex-col rounded-lg bg-white p-5 shadow-md">
                 <a className="self-center py-5" href={'/'}>
-                    <img src={logo} alt="Logo" />
+                    <img className="max-h-[72px] object-contain" src={logo} alt="Logo" />
                 </a>
 
                 <form onSubmit={onSubmit} className="flex h-full w-fit flex-col justify-around gap-8">
