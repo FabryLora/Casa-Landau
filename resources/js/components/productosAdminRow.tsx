@@ -10,27 +10,27 @@ import Switch from './Switch';
 export default function ProductosAdminRow({ producto }) {
     const [edit, setEdit] = useState(false);
 
-    const { categorias, subcategorias } = usePage().props;
+    const { categorias, subcategorias, terminaciones, materiales } = usePage().props;
+
+    const [categoriaSelected, setCategoriaSelected] = useState(producto.categoria_id);
 
     const { data, setData, post, reset, errors } = useForm({
         order: producto?.order,
         name: producto?.name,
         code: producto?.code,
-        code_oem: producto?.code_oem,
-        code_competitor: producto?.code_competitor,
         medida: producto?.medida,
         categoria_id: producto?.categoria_id,
         sub_categoria_id: producto?.sub_categoria_id,
-        desc_visible: producto?.desc_visible,
-        desc_invisible: producto?.desc_invisible,
-        unidad_pack: producto?.unidad_pack,
-        oferta: producto?.oferta,
-        stock: producto?.stock,
-        descuento_oferta: producto?.descuento_oferta,
+        terminacion_id: producto?.terminacion_id,
+        material_id: producto?.material_id,
+        unidad_minima: producto?.unidad_minima,
+        descuento: producto?.descuento,
         id: producto?.id,
-        modelos: producto?.modelos?.map((modelo) => modelo.id) || [],
-        marcas: producto?.marcas?.map((marca) => marca.categoria_id) || [],
     });
+
+    useEffect(() => {
+        setCategoriaSelected(data.categoria_id);
+    }, [data.categoria_id]);
 
     const handleUpdate = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -62,22 +62,9 @@ export default function ProductosAdminRow({ producto }) {
         }
     };
 
-    const [modeloSelected, setModeloSelected] = useState([]);
-    const [marcaSelected, setMarcaSelected] = useState([]);
     const [existingImages, setExistingImages] = useState(producto.imagenes || []);
     const [newImagePreviews, setNewImagePreviews] = useState([]);
     const [imagesToDelete, setImagesToDelete] = useState([]);
-
-    useEffect(() => {
-        setData(
-            'modelos',
-            modeloSelected.map((m) => m.value),
-        );
-        setData(
-            'marcas',
-            marcaSelected.map((m) => m.value),
-        );
-    }, [modeloSelected, marcaSelected]);
 
     const handleFileChange = (e) => {
         const files = Array.from(e.target.files);
@@ -131,35 +118,14 @@ export default function ProductosAdminRow({ producto }) {
             <td className="align-middle">{producto?.order}</td>
             <td className="align-middle">{producto?.name}</td>
             <td className="align-middle">{producto?.code}</td>
-            <td className="align-middle">{producto?.code_oem}</td>
-            <td className="h-[90px] align-middle">
-                {categorias
-                    ?.filter((categoria) => producto.marcas?.some((marca) => marca.categoria_id === categoria.id))
-                    .map((categoria) => (
-                        <span key={categoria.id} className="bg-primary-orange mx-1 inline-block rounded px-2 py-1 text-xs font-semibold text-white">
-                            {categoria.name}
-                        </span>
-                    ))}
-            </td>
-            <td className="h-[90px] align-middle">
-                {subcategorias
-                    ?.filter((subcategoria) => producto.modelos?.some((modelo) => modelo.sub_categoria_id === subcategoria.id))
-                    .map((subcategoria) => (
-                        <span
-                            key={subcategoria.id}
-                            className="bg-primary-orange mx-1 inline-block rounded px-2 py-1 text-xs font-semibold text-white"
-                        >
-                            {subcategoria.name}
-                        </span>
-                    ))}
+            <td className="align-middle">{producto?.categoria?.name}</td>
+            <td className="align-middle">{producto?.subcategoria?.name}</td>
+            <td className="align-middle">
+                {producto?.descuento > 0 ? <p className="text-green-500">{producto?.descuento}%</p> : <p>Sin descuento</p>}
             </td>
 
             <td className="flex h-[90px] flex-row items-center justify-center">
                 <Switch routeName="cambiarDestacado" id={producto?.id} status={producto?.destacado == 1} />
-            </td>
-
-            <td className="pl-3">
-                <Switch routeName="cambiarOferta" id={producto?.id} status={producto?.oferta == 1} />
             </td>
 
             <td className="w-[140px] text-center">
@@ -222,22 +188,7 @@ export default function ProductosAdminRow({ producto }) {
                                         value={data.name}
                                         onChange={(e) => setData('name', e.target.value)}
                                     />
-                                    <label htmlFor="descripcion">Descripcion visible</label>
-                                    <textarea
-                                        className="focus:outline-primary-orange rounded-md p-2 outline outline-gray-300 focus:outline"
-                                        name="descripcion"
-                                        id="descripcion"
-                                        value={data.desc_visible}
-                                        onChange={(e) => setData('desc_visible', e.target.value)}
-                                    />
-                                    <label htmlFor="descripcion_invisible">Descripcion no visible</label>
-                                    <textarea
-                                        className="focus:outline-primary-orange rounded-md p-2 outline outline-gray-300 focus:outline"
-                                        name="descripcion_invisible"
-                                        id="descripcion_invisible"
-                                        value={data.desc_invisible}
-                                        onChange={(e) => setData('desc_invisible', e.target.value)}
-                                    />
+
                                     <label htmlFor="code">
                                         Codigo <span className="text-red-500">*</span>
                                     </label>
@@ -248,28 +199,6 @@ export default function ProductosAdminRow({ producto }) {
                                         id="code"
                                         value={data.code}
                                         onChange={(e) => setData('code', e.target.value)}
-                                    />
-
-                                    <label htmlFor="code_oem">
-                                        Codigo OEM <span className="text-red-500">*</span>
-                                    </label>
-                                    <input
-                                        className="focus:outline-primary-orange rounded-md p-2 outline outline-gray-300 focus:outline"
-                                        type="text"
-                                        name="code_oem"
-                                        id="code_oem"
-                                        value={data.code_oem}
-                                        onChange={(e) => setData('code_oem', e.target.value)}
-                                    />
-
-                                    <label htmlFor="code_competitor">Codigo competidor</label>
-                                    <input
-                                        className="focus:outline-primary-orange rounded-md p-2 outline outline-gray-300 focus:outline"
-                                        type="text"
-                                        name="code_competitor"
-                                        id="code_competitor"
-                                        value={data.code_competitor}
-                                        onChange={(e) => setData('code_competitor', e.target.value)}
                                     />
 
                                     <label htmlFor="medida">
@@ -285,81 +214,85 @@ export default function ProductosAdminRow({ producto }) {
                                     />
 
                                     <label htmlFor="unidad">
-                                        Unidad por pack <span className="text-red-500">*</span>
+                                        Unidad minima <span className="text-red-500">*</span>
                                     </label>
                                     <input
                                         className="focus:outline-primary-orange rounded-md p-2 outline outline-gray-300 focus:outline"
                                         type="number"
                                         name="unidad"
                                         id="unidad"
-                                        value={data.unidad_pack}
-                                        onChange={(e) => setData('unidad_pack', e.target.value)}
+                                        value={data.unidad_minima}
+                                        onChange={(e) => setData('unidad_minima', e.target.value)}
                                     />
 
-                                    <label htmlFor="stock">
-                                        Stock <span className="text-red-500">*</span>
-                                    </label>
-                                    <input
-                                        className="focus:outline-primary-orange rounded-md p-2 outline outline-gray-300 focus:outline"
-                                        type="number"
-                                        name="stock"
-                                        id="stock"
-                                        value={data.stock}
-                                        onChange={(e) => setData('stock', e.target.value)}
-                                    />
-
-                                    <label htmlFor="descuento">Descuento por oferta</label>
+                                    <label htmlFor="descuento">Descuento</label>
                                     <input
                                         className="focus:outline-primary-orange rounded-md p-2 outline outline-gray-300 focus:outline"
                                         type="number"
                                         name="descuento"
                                         id="descuento"
-                                        value={data.descuento_oferta}
-                                        onChange={(e) => setData('descuento_oferta', e.target.value)}
+                                        value={data.descuento}
+                                        onChange={(e) => setData('descuento', e.target.value)}
                                     />
 
-                                    <label htmlFor="categoria">
-                                        Marcas <span className="text-red-500">*</span>
-                                    </label>
+                                    <label htmlFor="categoria_id">Categoria</label>
                                     <Select
-                                        options={categorias?.map((categoria) => ({
+                                        value={data.categoria_id}
+                                        name="categoria_id"
+                                        id="categoria_id"
+                                        options={categorias.map((categoria) => ({
                                             value: categoria.id,
                                             label: categoria.name,
                                         }))}
-                                        defaultValue={categorias
-                                            ?.filter((categoria) => producto.marcas?.some((marca) => marca.categoria_id === categoria.id))
-                                            .map((categoria) => ({
-                                                value: categoria.id,
-                                                label: categoria.name,
-                                            }))}
-                                        onChange={(options) => setMarcaSelected(options)}
-                                        className=""
-                                        name="categoria"
-                                        id="categoria"
-                                        isMulti
+                                        onChange={(option) => setData('categoria_id', option.value)}
+                                        className="basic-single"
+                                        classNamePrefix="select"
                                     />
 
-                                    <label htmlFor="subcategoria">
-                                        Modelos <span className="text-red-500">*</span>
-                                    </label>
+                                    {/* mostrar subcategorias dependiendo la categoria seleccionada */}
+
+                                    <label htmlFor="sub_categoria_id">Rubro</label>
                                     <Select
-                                        options={subcategorias?.map((subcategoria) => ({
-                                            value: subcategoria.id,
-                                            label: subcategoria.name,
-                                        }))}
-                                        defaultValue={subcategorias
-                                            ?.filter((subcategoria) =>
-                                                producto.modelos?.some((modelo) => modelo.sub_categoria_id === subcategoria.id),
-                                            )
+                                        value={data.sub_categoria_id}
+                                        name="sub_categoria_id"
+                                        id="sub_categoria_id"
+                                        options={subcategorias
+                                            .filter((sub) => sub.categoria_id == categoriaSelected)
                                             .map((subcategoria) => ({
                                                 value: subcategoria.id,
                                                 label: subcategoria.name,
                                             }))}
-                                        onChange={(options) => setModeloSelected(options)}
-                                        className=""
-                                        name="subcategoria"
-                                        id="subcategoria"
-                                        isMulti
+                                        onChange={(option) => setData('sub_categoria_id', option.value)}
+                                        className="basic-single"
+                                        classNamePrefix="select"
+                                    />
+
+                                    <label htmlFor="terminacion_id">Terminación</label>
+                                    <Select
+                                        value={data.terminacion_id}
+                                        name="terminacion_id"
+                                        id="terminacion_id"
+                                        options={terminaciones.map((terminacion) => ({
+                                            value: terminacion.id,
+                                            label: terminacion.name,
+                                        }))}
+                                        onChange={(option) => setData('terminacion_id', option.value)}
+                                        className="basic-single"
+                                        classNamePrefix="select"
+                                    />
+
+                                    <label htmlFor="material_id">Material</label>
+                                    <Select
+                                        value={data.material_id}
+                                        name="material_id"
+                                        id="material_id"
+                                        options={materiales.map((material) => ({
+                                            value: material.id,
+                                            label: material.name,
+                                        }))}
+                                        onChange={(option) => setData('material_id', option.value)}
+                                        className="basic-single"
+                                        classNamePrefix="select"
                                     />
 
                                     <label>Imágenes del Producto</label>

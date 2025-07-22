@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('materiales', function (Blueprint $table) {
             $table->id();
-            $table->string('order')->nullable();
+            $table->string('order')->default('zzz');
             $table->string('name')->nullable();
             $table->timestamps();
         });

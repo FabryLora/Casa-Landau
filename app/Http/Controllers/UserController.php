@@ -75,19 +75,10 @@ class UserController extends Controller
 
         $user = User::findOrFail($request->id);
 
-        $datos = $request->validate(
-            [
-                'sucursales' => 'nullable|array',
-                'sucursales.*' => 'exists:sucursals,id',
-            ]
-        );
 
         $data = $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users,email,' . $user->id,
-            'email_dos' => 'nullable|sometimes|string|email|max:255',
-            'email_tres' => 'nullable|sometimes|string|email|max:255',
-            'email_cuatro' => 'nullable|sometimes|string|email|max:255',
             'password' => 'nullable|string|min:8|confirmed',
             'razon_social' => 'nullable|sometimes|string|max:255',
             'cuit' => 'required|string|max:20',
@@ -99,21 +90,12 @@ class UserController extends Controller
             'descuento_tres' => 'nullable|integer|min:0|max:100',
             'rol' => 'nullable|string|max:255',
             'telefono' => 'nullable|string|max:20',
-            'lista_de_precios_id' => 'sometimes|exists:lista_de_precios,id',
+            'lista_de_precios_id' => 'nullable|sometimes|exists:lista_de_precios,id',
             'autorizado' => 'nullable|boolean',
             'vendedor_id' => 'nullable|sometimes|exists:users,id',
 
         ]);
 
-
-        if ($request->has('sucursales')) {
-            foreach ($datos['sucursales'] as $sucursal) {
-                SucursalCliente::create([
-                    'user_id' => $user->id,
-                    'sucursal_id' => $sucursal,
-                ]);
-            }
-        }
 
         $user->update($data);
     }

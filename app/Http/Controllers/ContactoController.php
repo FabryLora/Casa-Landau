@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Mail\ContactFormMail;
+use App\Models\Banner;
 use App\Models\Contacto;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
@@ -73,5 +74,12 @@ class ContactoController extends Controller
 
 
         return redirect()->back()->with('success', 'Contacto updated successfully.');
+    }
+
+    public function contactoBanner()
+    {
+        $contacto = Banner::where('name', 'contacto')->first();
+
+        return inertia('admin/contactoBanner', ['contacto' => $contacto]);
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Banner;
 use App\Models\Novedades;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -149,5 +150,12 @@ class NovedadesController extends Controller
         $novedad->delete();
 
         return redirect()->back()->with('success', 'Novedad deleted successfully.');
+    }
+
+    public function novedadesBanner()
+    {
+        $novedades = Banner::where('name', 'novedades')->first();
+
+        return inertia('admin/novedadesBanner', ['novedades' => $novedades]);
     }
 }

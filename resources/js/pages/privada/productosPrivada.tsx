@@ -1,12 +1,11 @@
 import ProductosPrivadaRow from '@/components/productosPrivadaRow';
-import Slider from '@/components/slider';
 import { Head, router, usePage } from '@inertiajs/react';
 import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import DefaultLayout from '../defaultLayout';
 
 export default function ProductosPrivada({ categorias, subcategorias }) {
-    const { productos, auth, clienteSeleccionado, id, modelo_id, code, code_oem, desc_visible } = usePage().props;
+    const { productos, auth, clienteSeleccionado } = usePage().props;
     const user = auth.user;
 
     const [margenSwitch, setMargenSwitch] = useState(false);
@@ -118,130 +117,64 @@ export default function ProductosPrivada({ categorias, subcategorias }) {
                 </div>
             )}
 
-            <div className="mb-10 flex flex-col gap-10 max-sm:gap-6">
-                <Slider />
-                <div className="bg-primary-orange h-[123px] w-full max-sm:h-auto max-sm:py-4">
-                    <div className="mx-auto flex h-full w-[1200px] flex-row items-center max-sm:w-full max-sm:flex-col max-sm:gap-4 max-sm:px-4">
-                        <p className="w-1/3 text-[24px] text-white max-sm:w-full max-sm:text-center max-sm:text-[20px]">Compra rápida</p>
-                        <form
-                            onSubmit={handleFastBuy}
-                            className="grid h-[47px] w-full grid-cols-5 gap-5 max-sm:h-auto max-sm:grid-cols-1 max-sm:gap-3"
-                        >
-                            <input
-                                name="code"
-                                placeholder="Codigo"
-                                type="text"
-                                className="focus:outline-primary-orange col-span-2 bg-white pl-2 transition duration-300 outline-none placeholder:text-black max-sm:col-span-1 max-sm:h-[40px]"
-                            />
-                            <input
-                                name="qty"
-                                placeholder="Cantidad"
-                                type="number"
-                                className="focus:outline-primary-orange col-span-2 bg-white pl-2 transition duration-300 outline-none placeholder:text-black max-sm:col-span-1 max-sm:h-[40px]"
-                            />
-                            <button className="border text-white transition duration-300 hover:bg-white hover:text-black max-sm:h-[40px]">
-                                Añadir
-                            </button>
-                        </form>
-                    </div>
-                </div>
-                <div className="w-full">
+            <div className="mb-10 flex flex-col max-sm:gap-6">
+                <div className="flex h-fit w-full items-center justify-center bg-[#F5F5F5] py-10" x-data="filtroSubcategorias">
                     <form
-                        action={route('index.privada.productos')}
+                        action="{{ route('productos') }}"
                         method="GET"
-                        className="mx-auto flex h-fit w-[1200px] flex-row items-center gap-4 max-sm:w-full max-sm:flex-col max-sm:gap-3 max-sm:px-4"
+                        className="mx-auto flex h-[231px] w-[1200px] flex-col justify-evenly rounded-lg bg-white px-4 text-[16px] font-semibold text-[#6E7173] shadow-lg"
                     >
-                        <select
-                            defaultValue={id || ''}
-                            name="id"
-                            onChange={(e) => setMarcaSelected(e.target.value)}
-                            className="focus:outline-primary-orange h-[47px] w-full border bg-white outline-0 transition duration-300 focus:outline max-sm:h-[40px]"
-                        >
-                            <option value="">Marca</option>
-                            {categorias?.map((categoria) => (
-                                <option key={categoria.id} value={categoria.id}>
-                                    {categoria.name}
-                                </option>
-                            ))}
-                        </select>
+                        <div className="flex flex-col gap-3">
+                            <label htmlFor="avanzada">Búsqueda avanzada</label>
+                            <input
+                                placeholder="Código, Nombre, Categoría, Sub categoría"
+                                type="text"
+                                className="h-[42px] rounded-lg border border-[#DFDFDF] pl-2"
+                            />
+                        </div>
+                        <div className="grid grid-cols-5 gap-4">
+                            <div className="flex flex-col gap-3">
+                                <label htmlFor="avanzada">Rubro</label>
+                                <select className="h-[42px] rounded-lg border border-[#DFDFDF] pl-2" name="" id="">
+                                    <option value="">Elegir rubro</option>
+                                </select>
+                            </div>
 
-                        <select
-                            defaultValue={modelo_id || ''}
-                            name="modelo_id"
-                            className="focus:outline-primary-orange h-[47px] w-full border bg-white outline-0 transition duration-300 focus:outline max-sm:h-[40px]"
-                        >
-                            <option value="">Modelo</option>
-                            {subcategorias
-                                ?.filter((subcategoria) => subcategoria.categoria_id == marcaSelected)
-                                .map((subcategoria) => (
-                                    <option key={subcategoria.id} value={subcategoria.id}>
-                                        {subcategoria.name}
-                                    </option>
-                                ))}
-                        </select>
+                            <div className="flex flex-col gap-3">
+                                <label htmlFor="avanzada">Categoria</label>
+                                <select className="h-[42px] rounded-lg border border-[#DFDFDF] pl-2" name="" id="">
+                                    <option value="">Elegir categoria</option>
+                                </select>
+                            </div>
 
-                        <input
-                            defaultValue={desc_visible || ''}
-                            type="text"
-                            name="medida"
-                            placeholder="Medida"
-                            className="focus:outline-primary-orange h-[47px] w-full border bg-white pl-2 outline-0 transition duration-300 placeholder:text-black focus:outline max-sm:h-[40px]"
-                        />
+                            <div className="flex flex-col gap-3">
+                                <label htmlFor="avanzada">Material</label>
+                                <select className="h-[42px] rounded-lg border border-[#DFDFDF] pl-2" name="" id="">
+                                    <option value="">Elegir material</option>
+                                </select>
+                            </div>
 
-                        <input
-                            defaultValue={code || ''}
-                            type="text"
-                            name="code"
-                            placeholder="Código"
-                            className="focus:outline-primary-orange h-[47px] w-full border bg-white pl-2 outline-0 transition duration-300 placeholder:text-black focus:outline max-sm:h-[40px]"
-                        />
-                        <input
-                            defaultValue={code_oem || ''}
-                            type="text"
-                            name="code_oem"
-                            placeholder="Cód. OEM"
-                            className="focus:outline-primary-orange h-[47px] w-full border bg-white pl-2 outline-0 transition duration-300 placeholder:text-black focus:outline max-sm:h-[40px]"
-                        />
-                        <input
-                            defaultValue={desc_visible || ''}
-                            type="text"
-                            name="descripcion"
-                            placeholder="Descripcion"
-                            className="focus:outline-primary-orange h-[47px] w-full border bg-white pl-2 outline-0 transition duration-300 placeholder:text-black focus:outline max-sm:h-[40px]"
-                        />
+                            <div className="flex flex-col gap-3">
+                                <label htmlFor="avanzada">Medida</label>
+                                <input placeholder="mm" type="text" className="h-[42px] rounded-lg border border-[#DFDFDF] pl-2" />
+                            </div>
 
-                        <button
-                            type="submit"
-                            className="bg-primary-orange hover:text-primary-orange hover:border-primary-orange h-[47px] w-full border border-white text-white transition duration-300 hover:bg-white max-sm:h-[40px]"
-                        >
-                            Buscar
-                        </button>
+                            <button className="bg-primary-orange h-[42px] self-end rounded-lg px-2 py-1 font-bold text-white">Buscar</button>
+                        </div>
                     </form>
                 </div>
-                <div className="mx-auto flex w-[1200px] flex-col gap-2 max-sm:w-full max-sm:px-4">
-                    <div className="flex flex-row justify-end max-sm:justify-end">
-                        <div className="flex flex-row items-center gap-2">
-                            <p className="text-[16px] max-sm:text-[14px]">Vista mostrador</p>
-                            <button
-                                onClick={() => setMargenSwitch(!margenSwitch)}
-                                className={`relative flex h-[15px] w-[28px] items-center rounded-full border bg-gray-200 ${margenSwitch ? 'bg-primary-orange' : ''} transition duration-300`}
-                            >
-                                <div
-                                    className={`broder-2 absolute left-0 h-3 w-3 rounded-full border bg-white ${margenSwitch ? 'translate-x-4' : ''} shadow-lg transition duration-300`}
-                                />
-                            </button>
-                        </div>
-                    </div>
+                <div className="mx-auto my-10 flex w-[1200px] flex-col gap-2 max-sm:w-full max-sm:px-4">
                     <div className="w-full">
-                        <div className="grid h-[52px] grid-cols-9 items-center bg-[#F5F5F5] max-sm:hidden max-sm:h-[40px] max-sm:grid-cols-4 max-sm:text-[12px]">
+                        <div className="grid h-[52px] grid-cols-10 items-center bg-[#F5F5F5] text-[16px] font-bold max-sm:hidden max-sm:h-[40px] max-sm:grid-cols-4 max-sm:text-[12px]">
                             <p className="max-sm:hidden"></p>
                             <p>Código</p>
-                            <p className="max-sm:hidden">Codigo OEM</p>
-                            <p>Descripcion</p>
-                            <p className="text-right">Precio</p>
-                            <p className="text-right max-sm:hidden">Cantidad</p>
-                            <p className="text-right max-sm:hidden">Subtotal</p>
-                            <p className="text-center max-sm:hidden">Stock</p>
+                            <p className="max-sm:hidden">Nombre</p>
+                            <p>Terminacion</p>
+                            <p className="">Rubro</p>
+                            <p className="max-sm:hidden">Precio</p>
+                            <p className="text-center max-sm:hidden">Descuento</p>
+                            <p className="max-sm:hidden">Subtotal</p>
+                            <p className="text-center max-sm:hidden">Cantidad</p>
                             <p className="max-sm:hidden"></p>
                         </div>
                         {productos?.data?.map((producto, index) => (

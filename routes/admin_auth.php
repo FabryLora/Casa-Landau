@@ -25,6 +25,7 @@ use App\Http\Controllers\SliderController;
 use App\Http\Controllers\SubCategoriaController;
 use App\Http\Controllers\SubProductoController;
 use App\Http\Controllers\SucursalController;
+use App\Http\Controllers\TerminacionesController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ValoresController;
 use App\Models\Banner;
@@ -54,6 +55,9 @@ Route::middleware('auth:admin')->group(function () {
     Route::get('admin/valores', [ValoresController::class, 'index'])->name('admin.valores');
     Route::post('admin/valores', [ValoresController::class, 'update'])->name('admin.valores.update');
     Route::get('admin/nosotros-banner', [NosotrosController::class, 'nosotrosBanner'])->name('admin.nosotros.banner');
+    Route::get('admin/productos-banner', [ProductoController::class, 'productosBanner'])->name('admin.productos.banner');
+    Route::get('admin/novedades-banner', [NovedadesController::class, 'novedadesBanner'])->name('admin.novedades.banner');
+    Route::get('admin/contacto-banner', [ContactoController::class, 'contactoBanner'])->name('admin.contacto.banner');
 
     # Categorias
     Route::get('admin/categorias', [CategoriaController::class, 'index'])->name('admin.categorias');
@@ -197,6 +201,11 @@ Route::middleware('auth:admin')->group(function () {
     Route::post('admin/materiales', [MaterialesController::class, 'store'])->name('admin.materiales.store');
     Route::post('admin/materiales/update', [MaterialesController::class, 'update'])->name('admin.materiales.update');
     Route::delete('admin/materiales/destroy', [MaterialesController::class, 'destroy'])->name('admin.materiales.destroy');
+
+    Route::get('admin/terminaciones', [TerminacionesController::class, 'index'])->name('admin.terminaciones');
+    Route::post('admin/terminaciones', [TerminacionesController::class, 'store'])->name('admin.terminaciones.store');
+    Route::post('admin/terminaciones/update', [TerminacionesController::class, 'update'])->name('admin.terminaciones.update');
+    Route::delete('admin/terminaciones/destroy', [TerminacionesController::class, 'destroy'])->name('admin.terminaciones.destroy');
 
     Route::get('/admin/dashboard', function () {
         if (!Auth::guard('admin')->check()) {

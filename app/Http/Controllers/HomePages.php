@@ -35,7 +35,7 @@ class HomePages extends Controller
         $novedades = Novedades::where('featured', true)->orderBy('order', 'asc')->get();
         $productos = Producto::where('destacado', true)
             ->orderBy('order', 'asc')
-            ->with(['imagenes', 'marcas', 'modelos', 'precio'])
+            ->with(['imagenes', 'precio'])
             ->get();
         return view('home', [
             'sliders' => $sliders,
@@ -70,20 +70,24 @@ class HomePages extends Controller
         ]);
     }
 
-    public function lanzamientos()
+    public function novedades()
     {
-        $lanzamientos = Novedades::orderBy('order', 'asc')
+        $novedades = Novedades::orderBy('order', 'asc')
             ->get();
+        $banner = Banner::where('name', 'novedades')->first();
         return view('lanzamientos', [
-            'lanzamientos' => $lanzamientos,
+            'novedades' => $novedades,
+            'banner' => $banner,
         ]);
     }
 
     public function contacto(Request $request)
     {
         $contacto = Contacto::first();
+        $banner = Banner::where('name', 'contacto')->first();
         return view('contacto', [
             'contacto' => $contacto,
+            'banner' => $banner,
             'mensaje' => $request->mensaje ?? null,
         ]);
     }

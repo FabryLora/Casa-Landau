@@ -111,7 +111,7 @@ export default function Vendedores() {
                             exit={{ opacity: 0 }}
                             className="fixed top-0 left-0 z-50 flex h-full w-full items-center justify-center bg-black/50 text-left"
                         >
-                            <form onSubmit={signup} className="flex h-fit w-[600px] flex-col gap-6 bg-white p-5 shadow-md">
+                            <form onSubmit={signup} className="flex h-fit w-[600px] flex-col gap-6 rounded-lg bg-white p-5 shadow-md">
                                 <h2 className="text-xl font-bold text-black">Registrar vendedor</h2>
                                 <div className="grid w-full grid-cols-2 gap-3 text-[16px]">
                                     <div className="col-span-2 flex flex-col gap-2">
@@ -120,7 +120,7 @@ export default function Vendedores() {
                                         </label>
                                         <input
                                             onChange={(ev) => signupForm.setData('name', ev.target.value)}
-                                            className="focus:outline-primary-orange h-[45px] w-full pl-3 outline-1 outline-[#DDDDE0] transition duration-300"
+                                            className="focus:outline-primary-orange h-[45px] w-full rounded-lg pl-3 outline-1 outline-[#DDDDE0] transition duration-300"
                                             type="text"
                                             name="name"
                                             id="name"
@@ -131,7 +131,7 @@ export default function Vendedores() {
                                         <label htmlFor="password">Contraseña</label>
                                         <input
                                             onChange={(ev) => signupForm.setData('password', ev.target.value)}
-                                            className="focus:outline-primary-orange h-[45px] w-full pl-3 outline-1 outline-[#DDDDE0] transition duration-300"
+                                            className="focus:outline-primary-orange h-[45px] w-full rounded-lg pl-3 outline-1 outline-[#DDDDE0] transition duration-300"
                                             type="password"
                                             name="password"
                                             id="password"
@@ -142,7 +142,7 @@ export default function Vendedores() {
                                         <label htmlFor="password_confirmation">Confirmar contraseña</label>
                                         <input
                                             onChange={(ev) => signupForm.setData('password_confirmation', ev.target.value)}
-                                            className="focus:outline-primary-orange h-[45px] w-full pl-3 outline-1 outline-[#DDDDE0] transition duration-300"
+                                            className="focus:outline-primary-orange h-[45px] w-full rounded-lg pl-3 outline-1 outline-[#DDDDE0] transition duration-300"
                                             type="password"
                                             name="password_confirmation"
                                             id="password_confirmation"
@@ -153,7 +153,7 @@ export default function Vendedores() {
                                         <label htmlFor="email">Email</label>
                                         <input
                                             onChange={(ev) => signupForm.setData('email', ev.target.value)}
-                                            className="focus:outline-primary-orange h-[45px] w-full pl-3 outline-1 outline-[#DDDDE0] transition duration-300"
+                                            className="focus:outline-primary-orange h-[45px] w-full rounded-lg pl-3 outline-1 outline-[#DDDDE0] transition duration-300"
                                             type="email"
                                             name="email"
                                             id="email"
@@ -165,7 +165,7 @@ export default function Vendedores() {
                                         <label htmlFor="dni">Cuit</label>
                                         <input
                                             onChange={(ev) => signupForm.setData('cuit', ev.target.value)}
-                                            className="focus:outline-primary-orange h-[45px] w-full pl-3 outline-1 outline-[#DDDDE0] transition duration-300"
+                                            className="focus:outline-primary-orange h-[45px] w-full rounded-lg pl-3 outline-1 outline-[#DDDDE0] transition duration-300"
                                             type="text"
                                             name="dni"
                                             id="dni"
@@ -177,7 +177,7 @@ export default function Vendedores() {
                                         <label htmlFor="direccion">Dirección</label>
                                         <input
                                             onChange={(ev) => signupForm.setData('direccion', ev.target.value)}
-                                            className="focus:outline-primary-orange h-[45px] w-full pl-3 outline-1 outline-[#DDDDE0] transition duration-300"
+                                            className="focus:outline-primary-orange h-[45px] w-full rounded-lg pl-3 outline-1 outline-[#DDDDE0] transition duration-300"
                                             type="text"
                                             name="direccion"
                                             id="direccion"
@@ -189,7 +189,7 @@ export default function Vendedores() {
                                         <label htmlFor="telefono">Telefono</label>
                                         <input
                                             onChange={(ev) => signupForm.setData('telefono', ev.target.value)}
-                                            className="focus:outline-primary-orange h-[45px] w-full pl-3 outline-1 outline-[#DDDDE0] transition duration-300"
+                                            className="focus:outline-primary-orange h-[45px] w-full rounded-lg pl-3 outline-1 outline-[#DDDDE0] transition duration-300"
                                             type="text"
                                             name="telefono"
                                             id="telefono"
@@ -202,7 +202,7 @@ export default function Vendedores() {
                                         <select
                                             required
                                             onChange={(ev) => signupForm.setData('provincia', ev.target.value)}
-                                            className="focus:outline-primary-orange h-[45px] w-full pl-3 outline-1 outline-[#DDDDE0] transition duration-300"
+                                            className="focus:outline-primary-orange h-[45px] w-full rounded-lg pl-3 outline-1 outline-[#DDDDE0] transition duration-300"
                                             name="provincia"
                                             id="provincia"
                                         >
@@ -222,7 +222,7 @@ export default function Vendedores() {
                                         <select
                                             required
                                             onChange={(ev) => signupForm.setData('localidad', ev.target.value)}
-                                            className="focus:outline-primary-orange h-[45px] w-full pl-3 outline-1 outline-[#DDDDE0] transition duration-300"
+                                            className="focus:outline-primary-orange h-[45px] w-full rounded-lg pl-3 outline-1 outline-[#DDDDE0] transition duration-300"
                                             name="localidad"
                                             id="localidad"
                                         >
@@ -244,11 +244,11 @@ export default function Vendedores() {
                                     <button
                                         type="button"
                                         onClick={() => setCreateView(false)}
-                                        className="bg-primary-orange col-span-2 h-[43px] w-full text-white"
+                                        className="bg-primary-orange col-span-2 h-[43px] w-full rounded-lg text-white"
                                     >
                                         Cancelar
                                     </button>
-                                    <button className="bg-primary-orange col-span-2 h-[43px] w-full text-white">Regsitrar cliente</button>
+                                    <button className="bg-primary-orange col-span-2 h-[43px] w-full rounded-lg text-white">Regsitrar cliente</button>
                                 </div>
                             </form>
                         </motion.div>
@@ -350,7 +350,7 @@ export default function Vendedores() {
                                     <td className="pl-3">VENDEDOR</td>
 
                                     <td className="py-2">EMAIL</td>
-                                    <td className="py-2">AUTORIZADO</td>
+                                    <td className="py-2 text-center">AUTORIZADO</td>
 
                                     <td className="text-center">EDITAR</td>
                                 </tr>

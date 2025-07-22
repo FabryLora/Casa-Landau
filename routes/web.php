@@ -17,9 +17,9 @@ use Inertia\Inertia;
 Route::get('/', [HomePages::class, 'home'])->name('home');
 Route::get('/nosotros', [HomePages::class, 'nosotros'])->name('nosotros');
 Route::get('/calidad', [HomePages::class, 'calidad'])->name('calidad');
-Route::get('/lanzamientos', [HomePages::class, 'lanzamientos'])->name('lanzamientos');
+Route::get('/novedades', [HomePages::class, 'novedades'])->name('novedades');
 Route::get('/contacto', [HomePages::class, 'contacto'])->name('contacto');
-Route::get('/lanzamientos/{id}', [NovedadesController::class, 'novedadesShow'])->name('novedades');
+Route::get('/novedades/{id}', [NovedadesController::class, 'novedadesShow'])->name('novedades.show');
 Route::post('/contacto/sendemail', [ContactoController::class, 'sendContact'])->name('send.contact');
 
 Route::get('/productos', [ProductoController::class, 'productosAnteSala'])->name('productos');

@@ -64,8 +64,11 @@ export default function Dashboard({ children }) {
             icon: faBoxArchive,
             href: '#',
             subHref: [
+                { title: 'Banner', href: 'productos-banner' },
                 { title: 'Categorias', href: 'categorias' },
                 { title: 'Rubros', href: 'subcategorias' },
+                { title: 'Materiales', href: 'materiales' },
+                { title: 'Terminaciones', href: 'terminaciones' },
                 { title: 'Productos', href: 'productos' },
                 { title: 'Lista de precios', href: 'listadeprecios' },
             ],
@@ -77,7 +80,10 @@ export default function Dashboard({ children }) {
             title: 'Novedades',
             icon: faNewspaper,
             href: 'novedades',
-            subHref: [],
+            subHref: [
+                { title: 'Banner', href: 'novedades-banner' },
+                { title: 'Contenido', href: 'novedades' },
+            ],
         },
         {
             id: 'contacto',
@@ -85,7 +91,10 @@ export default function Dashboard({ children }) {
             title: 'Contacto',
             icon: faEnvelope,
             href: 'contacto',
-            subHref: [],
+            subHref: [
+                { title: 'Banner', href: 'contacto-banner' },
+                { title: 'Contenido', href: 'contacto' },
+            ],
         },
         {
             id: 'zonaprivada',
@@ -96,7 +105,6 @@ export default function Dashboard({ children }) {
             subHref: [
                 { title: 'Clientes', href: 'clientes' },
                 { title: 'Vendedores', href: 'vendedores' },
-                { title: 'Sucursales', href: 'sucursales' },
                 { title: 'Informacion de pagos', href: 'informacion-de-pago' },
                 { title: 'Pedidos', href: 'pedidos' },
                 { title: 'Carrito', href: 'carrito' },

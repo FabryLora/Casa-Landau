@@ -40,9 +40,9 @@ const Navbar = () => {
 
     const privateLinks = [
         { title: 'Productos', href: '/privada/productos' },
-        { title: 'Márgenes', href: '/privada/margenes' },
-        { title: 'Pedidos', href: '/privada/pedidos' },
-        { title: 'Información de pagos', href: '/privada/informacion-de-pagos' },
+        { title: 'Carrito', href: '/privada/carrito' },
+        { title: 'Mis pedidos', href: '/privada/pedidos' },
+
         /* { title: 'Cuenta corriente', href: '/privada/cuenta-corriente' }, */
         { title: 'Lista de precios', href: '/privada/lista-de-precios' },
     ];
@@ -51,94 +51,31 @@ const Navbar = () => {
 
     return (
         <div
-            className={`sticky top-0 z-50 flex h-[131px] w-full flex-col transition-colors duration-300 max-sm:h-[80px] ${scrolled ? 'bg-white shadow-md' : 'bg-transparent'}`}
+            className={`sticky top-0 z-50 flex h-[100px] w-full flex-col bg-white transition-colors duration-300 max-sm:h-auto ${scrolled ? 'bg-white shadow-md' : 'bg-transparent'}`}
         >
-            {/* Upper Bar */}
-            <div className="bg-primary-orange relative min-h-[49px] max-sm:min-h-[35px]">
-                <div className="relative mx-auto flex h-full w-[1200px] items-center justify-end gap-6 max-sm:w-full max-sm:px-4">
-                    <button
-                        onClick={() => setShowLogin(!showLogin)}
-                        className="z-100 h-[33px] w-[184px] border border-white text-sm text-white uppercase hover:bg-white hover:text-black max-sm:h-[28px] max-sm:w-[140px] max-sm:text-xs"
-                    >
-                        {auth?.user?.name}
-                    </button>
-
-                    {showLogin && <div className="fixed inset-0 bg-black/50 transition-all duration-300" />}
-                    {showLogin && (
-                        <div className="absolute top-12 right-0 z-50 flex h-fit w-fit flex-col items-center gap-5 border bg-white p-5 transition-all duration-300 max-sm:top-8 max-sm:p-3">
-                            <p className="max-sm:text-sm">Bienvenido, {auth?.user?.name}!</p>
-                            {user?.rol === 'vendedor' && (
-                                <Link
-                                    href={route('borrarCliente')}
-                                    className="bg-primary-orange flex h-[48px] w-[328px] items-center justify-center font-bold text-white max-sm:h-[40px] max-sm:w-[250px] max-sm:text-sm"
-                                >
-                                    Elegir cliente
-                                </Link>
-                            )}
-                            <div className="flex flex-col">
-                                <Link
-                                    method="post"
-                                    href={route('logout')}
-                                    className="flex h-[48px] w-[328px] items-center justify-center bg-red-500 font-bold text-white max-sm:h-[40px] max-sm:w-[250px] max-sm:text-sm"
-                                >
-                                    Cerrar sesion
-                                </Link>
-                            </div>
-                        </div>
-                    )}
-                </div>
-            </div>
-
             {/* Main Navbar Content */}
-            <div className="mx-auto flex h-full w-[1200px] items-center justify-between max-sm:w-full max-sm:px-4">
+            <div className="mx-auto flex h-full w-[1200px] items-center justify-between max-sm:h-[60px] max-sm:w-full max-sm:px-4">
                 <a href="/">
                     <img
                         src={scrolled ? logos?.logo_secundario : logos?.logo_principal}
-                        className="h-10 transition-all duration-300 max-sm:h-8"
+                        className="max-h-[83px] transition-all duration-300 max-sm:h-8"
                         alt="Logo"
                     />
                 </a>
 
                 {/* Desktop Menu */}
-                <div className="hidden items-center gap-6 md:flex">
+                <div className="hidden items-center gap-20 md:flex">
                     {linksToRender.map((link) => (
                         <Link
                             key={link.href}
                             href={link.href}
-                            className={`hover:text-primary-orange text-sm transition-colors duration-300 ${
+                            className={`hover:text-primary-orange text-sm text-black transition-colors duration-300 ${
                                 window.location.pathname === link.href ? 'font-bold' : ''
                             }`}
                         >
                             {link.title}
                         </Link>
                     ))}
-                    {window.location.pathname.includes('privada') && (
-                        <Link href={'/privada/carrito'} className="relative flex items-center gap-2">
-                            {Object?.keys(carrito || {})?.length > 0 && (
-                                <span className="absolute -top-1 -right-2 flex size-3">
-                                    <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-sky-400 opacity-75"></span>
-                                    <span className="relative inline-flex size-3 rounded-full bg-sky-500"></span>
-                                </span>
-                            )}
-
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                width="20"
-                                height="20"
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                stroke="#0072c6"
-                                strokeWidth="2"
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                className="lucide lucide-shopping-cart-icon lucide-shopping-cart"
-                            >
-                                <circle cx="8" cy="21" r="1" />
-                                <circle cx="19" cy="21" r="1" />
-                                <path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12" />
-                            </svg>
-                        </Link>
-                    )}
                 </div>
 
                 {/* Mobile Menu Button */}

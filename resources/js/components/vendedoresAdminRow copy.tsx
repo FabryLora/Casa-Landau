@@ -64,7 +64,7 @@ export default function VendedoresAdminRow({ vendedor }) {
             <td className="pl-5 text-left">{vendedor?.name}</td>
             <td className="text-left">{vendedor?.email}</td>
 
-            <td className="h-[90px]">
+            <td className="flex h-[90px] items-center justify-center">
                 <UserSwitch routeName="admin.clientes.autorizar" id={vendedor?.id} status={vendedor?.autorizado == 1} />
             </td>
 

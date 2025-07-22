@@ -58,7 +58,7 @@
             @foreach(($isPrivate ? $privateLinks : $defaultLinks) as $link)
                 <a href="{{ $link['href'] }}"
                     class="text-sm hover:text-primary-orange transition-colors duration-300 text-black 
-                                                                                                                                                                                                            {{ Request::is(ltrim($link['href'], '/')) ? 'font-bold' : '' }}">
+                                                                                                                                                                                                                    {{ Request::is(ltrim($link['href'], '/')) ? 'font-bold' : '' }}">
                     {{ $link['title'] }}
                 </a>
             @endforeach
@@ -82,7 +82,7 @@
             @foreach(($isPrivate ? $privateLinks : $defaultLinks) as $link)
                 <a href="{{ $link['href'] }}"
                     class="block px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 hover:text-primary-orange transition-colors duration-300
-                                                                                                                                                                                                            {{ Request::is(ltrim($link['href'], '/')) ? 'font-bold bg-orange-50 text-primary-orange' : '' }}"
+                                                                                                                                                                                                                    {{ Request::is(ltrim($link['href'], '/')) ? 'font-bold bg-orange-50 text-primary-orange' : '' }}"
                     @click="mobileMenuOpen = false">
                     {{ $link['title'] }}
                 </a>
@@ -206,19 +206,31 @@
                         class="w-full px-3 py-2 max-sm:px-2 max-sm:py-1.5 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-orange text-sm max-sm:text-xs">
                 </div>
 
-                <div>
-                    <label for="register_address" class="block text-sm max-sm:text-xs font-medium text-gray-700 mb-2">
-                        Dirección
-                    </label>
-                    <input name="direccion" type="text" id="register_address"
-                        class="w-full px-3 py-2 max-sm:px-2 max-sm:py-1.5 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-orange text-sm max-sm:text-xs">
-                </div>
+
 
                 <div>
                     <label for="register_phone" class="block text-sm max-sm:text-xs font-medium text-gray-700 mb-2">
                         Teléfono
                     </label>
                     <input name="telefono" type="text" id="register_phone"
+                        class="w-full px-3 py-2 max-sm:px-2 max-sm:py-1.5 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-orange text-sm max-sm:text-xs">
+                </div>
+
+
+                <div>
+                    <label for="register_razon_social"
+                        class="block text-sm max-sm:text-xs font-medium text-gray-700 mb-2">
+                        Razón Social
+                    </label>
+                    <input name="razon_social" type="text" id="register_razon_social"
+                        class="w-full px-3 py-2 max-sm:px-2 max-sm:py-1.5 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-orange text-sm max-sm:text-xs">
+                </div>
+
+                <div class="col-span-2">
+                    <label for="register_address" class="block text-sm max-sm:text-xs font-medium text-gray-700 mb-2">
+                        Dirección
+                    </label>
+                    <input name="direccion" type="text" id="register_address"
                         class="w-full px-3 py-2 max-sm:px-2 max-sm:py-1.5 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-orange text-sm max-sm:text-xs">
                 </div>
 
@@ -251,7 +263,7 @@
                 </div>
 
                 <button form="registerForm" type="submit"
-                    class="w-full bg-primary-orange text-white py-2 max-sm:py-1.5 px-4 rounded-md hover:bg-orange-600 transition-colors col-span-2 max-sm:col-span-1 text-sm max-sm:text-xs">
+                    class="w-full bg-primary-orange text-white py-2 max-sm:py-1.5 px-4 rounded-md hover:bg-primary-orange/80 transition-colors col-span-2 max-sm:col-span-1 text-sm max-sm:text-xs">
                     Crear Cuenta
                 </button>
             </div>

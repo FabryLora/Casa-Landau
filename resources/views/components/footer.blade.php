@@ -30,7 +30,7 @@
                 <a href="{{ route('nosotros') }}" class="text-[15px] text-white/80">Empresa</a>
                 <a {{-- href="{{ route('productos') }}" --}} class="text-[15px] text-white/80">Productos</a>
                 <a href="{{ route('calidad') }}" class="text-[15px] text-white/80">Calidad</a>
-                <a href="{{ route('lanzamientos') }}" class="text-[15px] text-white/80">Lanzamientos</a>
+                <a href="{{ route('novedades') }}" class="text-[15px] text-white/80">Lanzamientos</a>
                 <a href="{{ route('contacto') }}" class="text-[15px] text-white/80">Contacto</a>
             </div>
         </div>

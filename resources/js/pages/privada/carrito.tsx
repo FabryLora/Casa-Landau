@@ -80,7 +80,8 @@ export default function Carrito({
             <Head>
                 <title>Carrito</title>
             </Head>
-            <div className="mx-auto grid w-[1200px] grid-cols-2 gap-10 py-20 max-sm:w-full max-sm:px-4">
+
+            <div className="mx-auto mt-10 w-[1200px]">
                 <AnimatePresence>
                     {error && (
                         <motion.div
@@ -122,7 +123,6 @@ export default function Carrito({
                             <p>Código</p>
                             <p>Código OEM</p>
                             <p>Descripción</p>
-
                             <p className="text-right">Precio</p>
                             <p className="text-right">Cantidad</p>
                             <p className="text-right">Subtotal</p>
@@ -132,20 +132,20 @@ export default function Carrito({
                         {productos?.map((producto) => <ProductosPrivadaRow key={producto?.id} producto={producto} />)}
                     </div>
                 </div>
-
-                <div className="col-span-2">
-                    <div className="">
-                        <Link
-                            href={'/privada/productos'}
-                            className="border-primary-orange text-primary-orange hover:bg-primary-orange h-[47px] border px-5 py-2 font-semibold transition duration-300 hover:text-white"
-                        >
-                            Agregar productos
-                        </Link>
-                    </div>
+            </div>
+            <div className="col-span-2 mx-auto mt-10 w-[1200px]">
+                <div className="h-full">
+                    <Link
+                        href={'/privada/productos'}
+                        className="border-primary-orange text-primary-orange hover:bg-primary-orange h-[47px] rounded-lg border px-5 py-2 font-semibold transition duration-300 hover:text-white"
+                    >
+                        Agregar productos
+                    </Link>
                 </div>
-
-                <div className="h-[206px] border max-sm:order-1 max-sm:col-span-2">
-                    <div className="bg-[#EAEAEA]">
+            </div>
+            <div className="mx-auto grid w-[1200px] grid-cols-2 gap-10 py-20 max-sm:w-full max-sm:px-4">
+                <div className="h-[206px] rounded-lg border max-sm:order-1 max-sm:col-span-2">
+                    <div className="rounded-t-lg bg-[#EAEAEA]">
                         <h2 className="p-3 text-xl font-bold">Informacion importante</h2>
                     </div>
                     <div
@@ -156,13 +156,13 @@ export default function Carrito({
                     ></div>
                 </div>
 
-                <div className="h-fit w-full border bg-gray-50 max-sm:order-3 max-sm:col-span-2">
-                    <div className="bg-[#EAEAEA] p-3">
+                {/* <div className="h-fit w-full rounded-lg border bg-gray-50 max-sm:order-3 max-sm:col-span-2">
+                    <div className="rounded-t-lg bg-[#EAEAEA] p-3">
                         <h2 className="text-xl font-bold">Formas de pago</h2>
                     </div>
 
                     <div className="flex h-fit w-full flex-col justify-center gap-4 py-4 text-[18px] text-[#74716A]">
-                        {/* Opción: Retiro Cliente */}
+                       
                         <div
                             className={`flex cursor-pointer items-center justify-between rounded-lg pl-3`}
                             onClick={() => {
@@ -182,7 +182,7 @@ export default function Carrito({
                             </div>
                         </div>
 
-                        {/* Opción: A convenir */}
+                       
                         <div
                             className={`flex cursor-pointer items-center rounded-lg pl-3`}
                             onClick={() => {
@@ -261,31 +261,15 @@ export default function Carrito({
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> */}
 
-                <div className="flex h-[206px] flex-col gap-3 max-sm:order-2 max-sm:col-span-2">
-                    <div className="">
-                        <h2 className="text-xl font-bold">Escribinos un mensaje</h2>
-                    </div>
-                    <textarea
-                        onChange={(e) => {
-                            pedidoForm.setData('mensaje', e.target.value);
-                        }}
-                        className="h-[222px] w-full border p-3"
-                        name=""
-                        id=""
-                        rows={10}
-                        placeholder="Dias especiales de entrega, cambios de domicilio, expresos, requerimientos especiales en la mercaderia, exenciones."
-                    ></textarea>
-                </div>
-
-                <div className="h-fit w-full border bg-gray-50 max-sm:order-3 max-sm:col-span-2">
-                    <div className="bg-[#EAEAEA] p-3">
+                {/*  <div className="h-fit w-full rounded-lg border bg-gray-50 max-sm:order-3 max-sm:col-span-2">
+                    <div className="rounded-t-lg bg-[#EAEAEA] p-3">
                         <h2 className="text-xl font-bold">Formas de entrega</h2>
                     </div>
 
                     <div className="flex h-fit w-full flex-col justify-center gap-4 py-4 text-[18px] text-[#74716A]">
-                        {/* Opción: Retiro Cliente */}
+                        
                         <div
                             className={`flex cursor-pointer items-center justify-between rounded-lg pl-3`}
                             onClick={() => {
@@ -305,7 +289,7 @@ export default function Carrito({
                             </div>
                         </div>
 
-                        {/* Opción: A convenir */}
+                       
                         <div
                             className={`flex cursor-pointer items-center rounded-lg pl-3`}
                             onClick={() => {
@@ -325,15 +309,15 @@ export default function Carrito({
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> */}
 
                 <div className="flex flex-col gap-3 max-sm:order-4 max-sm:col-span-2">
                     <h2 className="text-2xl font-bold">Adjuntar un archivo</h2>
-                    <div className="flex w-full items-center justify-between border">
+                    <div className="flex w-full items-center justify-between rounded-lg border">
                         <span className="pl-4 text-gray-600">{pedidoForm?.data?.archivo?.name}</span>
                         <label
                             htmlFor="fileInput"
-                            className="text-primary-orange h-full cursor-pointer bg-gray-100 p-4 font-semibold hover:bg-gray-200"
+                            className="text-primary-orange h-full cursor-pointer rounded-r-lg bg-gray-100 p-4 font-semibold hover:bg-gray-200"
                         >
                             ADJUNTAR
                         </label>
@@ -348,8 +332,24 @@ export default function Carrito({
                     </div>
                 </div>
 
-                <div className="h-fit border max-sm:order-5 max-sm:col-span-2">
-                    <div className="bg-[#EAEAEA]">
+                <div className="flex h-[206px] flex-col gap-3 max-sm:order-2 max-sm:col-span-2">
+                    <div className="">
+                        <h2 className="text-xl font-bold">Escribinos un mensaje</h2>
+                    </div>
+                    <textarea
+                        onChange={(e) => {
+                            pedidoForm.setData('mensaje', e.target.value);
+                        }}
+                        className="h-[222px] w-full rounded-lg border p-3"
+                        name=""
+                        id=""
+                        rows={10}
+                        placeholder="Dias especiales de entrega, cambios de domicilio, expresos, requerimientos especiales en la mercaderia, exenciones."
+                    ></textarea>
+                </div>
+
+                <div className="h-fit rounded-lg border max-sm:order-5 max-sm:col-span-2">
+                    <div className="rounded-t-lg bg-[#EAEAEA]">
                         <h2 className="p-3 text-xl font-bold">Pedido</h2>
                     </div>
 
@@ -411,14 +411,14 @@ export default function Carrito({
                     <Link
                         href={route('destroy')}
                         method="post"
-                        className="border-primary-orange text-primary-orange flex h-[47px] w-full items-center justify-center border transition-transform hover:scale-95"
+                        className="border-primary-orange text-primary-orange ronuded-lg flex h-[47px] w-full items-center justify-center rounded-lg border transition-transform hover:scale-95"
                     >
                         Cancelar pedido
                     </Link>
                     <button
                         disabled={pedidoForm.processing}
                         onClick={hacerPedido}
-                        className={`h-[47px] w-full text-white transition-transform hover:scale-95 ${pedidoForm.processing ? 'bg-gray-400' : 'bg-primary-orange'}`}
+                        className={`h-[47px] w-full rounded-lg text-white transition-transform hover:scale-95 ${pedidoForm.processing ? 'bg-gray-400' : 'bg-primary-orange'}`}
                     >
                         {pedidoForm.processing ? 'Enviando pedido...' : 'Realizar pedido'}
                     </button>

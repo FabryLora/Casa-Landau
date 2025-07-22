@@ -10,9 +10,23 @@ class MaterialesController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $materiales = Materiales::orderBy('order', 'asc')->get();
+
+
+        $perPage = $request->input('per_page', 10);
+
+        $query = Materiales::query()->orderBy('order', 'asc');
+
+        if ($request->has('search') && !empty($request->search)) {
+            $searchTerm = $request->search;
+            $query->where('name', 'LIKE', '%' . $searchTerm . '%');
+        }
+
+        $materiales = $query->paginate($perPage);
+
+
+
         return inertia('admin/materialesAdmin', [
             'materiales' => $materiales,
         ]);

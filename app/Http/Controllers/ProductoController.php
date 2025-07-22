@@ -2,17 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Banner;
 use App\Models\Categoria;
 
 use App\Models\ImagenProducto;
 use App\Models\Materiales;
-use App\Models\Medidas;
 use App\Models\Metadatos;
 use App\Models\Producto;
-use App\Models\ProductoMarca;
-use App\Models\ProductoModelo;
 use App\Models\SubCategoria;
 use App\Models\SubProducto;
+use App\Models\Terminaciones;
 use Illuminate\Support\Facades\Auth;
 use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Http\Request;
@@ -29,11 +28,13 @@ class ProductoController extends Controller
     {
 
         $categorias = Categoria::select('id', 'name')->get();
-
+        $subcategorias = SubCategoria::orderBy('order', 'asc')->get();
+        $terminaciones = Terminaciones::orderBy('order', 'asc')->get();
+        $materiales = Materiales::orderBy('order', 'asc')->get();
 
         $perPage = $request->input('per_page', default: 10);
 
-        $query = Producto::query()->orderBy('order', 'asc')->with(['marcas', 'modelos', 'imagenes']);
+        $query = Producto::query()->orderBy('order', 'asc')->with(['terminacion', 'material', 'categoria', 'imagenes', 'subcategoria']);
 
         if ($request->has('search') && !empty($request->search)) {
             $searchTerm = $request->search;
@@ -42,14 +43,16 @@ class ProductoController extends Controller
 
         $productos = $query->paginate($perPage);
 
-        $subcategorias = SubCategoria::orderBy('order', 'asc')->get();
+
 
 
 
         return Inertia::render('admin/productosAdmin', [
             'productos' => $productos,
             'categorias' => $categorias,
-            'subcategorias' => $subcategorias
+            'subcategorias' => $subcategorias,
+            'terminaciones' => $terminaciones,
+            'materiales' => $materiales
 
         ]);
     }
@@ -60,10 +63,11 @@ class ProductoController extends Controller
         $subcategorias = SubCategoria::orderBy('order', 'asc')->get();
         /* $materiales = Materiales::orderBy('order', 'asc')->get(); */
         /* $medidas = Medidas::orderBy('order', 'asc')->get(); */
-
+        $banner = Banner::where('name', 'productos')->first();
         return view('productos-ante', [
             'categorias' => $categorias,
             'subcategorias' => $subcategorias,
+            'banner' => $banner,
         ]);
     }
 
@@ -72,16 +76,15 @@ class ProductoController extends Controller
         // Construir query base para productos
         $query = Producto::query();
 
-        // Filtro por categoría (a través de marcas)
         if ($request->filled('id')) {
-            $query->whereHas('marcas', function ($q) use ($request) {
+            $query->whereHas('categoria', function ($q) use ($request) {
                 $q->where('categoria_id', $request->id);
             });
         }
 
         // Filtro por modelo/subcategoría
         if ($request->filled('modelo_id')) {
-            $query->whereHas('modelos', function ($q) use ($request) {
+            $query->whereHas('subcategoria', function ($q) use ($request) {
                 $q->where('sub_categoria_id', $request->modelo_id);
             });
         }
@@ -91,10 +94,10 @@ class ProductoController extends Controller
             $query->where('code', 'LIKE', '%' . $request->code . '%');
         }
 
-        // Filtro por código OEM
-        if ($request->filled('code_oem')) {
-            $query->where('code_oem', 'LIKE', '%' . $request->code_oem . '%');
+        if ($request->filled('rubro')) {
+            $query->where('sub_categoria_id', 'LIKE', '%' . $request->rubro . '%');
         }
+
 
         if ($request->filled('medida')) {
             $query->where('medida', 'LIKE', '%' . $request->medida . '%');
@@ -110,14 +113,14 @@ class ProductoController extends Controller
         $query->orderBy('order', 'asc');
 
         // Ejecutar query con paginación
-        $productos = $query->with(['marcas.marca', 'modelos.modelo'])
+        $productos = $query->with(['categoria', 'subcategoria'])->where('categoria_id', $id)
             ->paginate(15)
             ->appends($request->query());
 
         // Si solo hay un producto en total (no en la página actual), redirigir
-        if ($productos->total() === 1) {
+        /*  if ($productos->total() === 1) {
             return redirect('/p/' . $productos->first()->code);
-        }
+        } */
 
         // Cargar datos adicionales para la vista
         $categorias = Categoria::with('subCategorias')->orderBy('order', 'asc')->get();
@@ -130,10 +133,8 @@ class ProductoController extends Controller
             'productos' => $productos,
             'categoria' => $categoria,
             'id' => $request->id,
-            'modelo_id' => $request->modelo_id,
             'code' => $request->code,
-            'code_oem' => $request->code_oem,
-            'desc_visible' => $request->desc_visible,
+            'rubro_id' => $request->rubro,
             'medida' => $request->medida,
             'categoria_id' => $id
         ]);
@@ -141,13 +142,12 @@ class ProductoController extends Controller
 
     public function show($codigo, Request $request)
     {
-        $producto = Producto::with(['categoria:id,name', 'imagenes', 'marcas.marca', 'modelos.modelo'])->where('code', $codigo)->first();
+        $producto = Producto::with(['categoria:id,name', 'imagenes', 'categoria', 'subcategoria'])->where('code', $codigo)->first();
 
         $subcategorias = SubCategoria::orderBy('order', 'asc')->get();
 
         $categorias = Categoria::select('id', 'name', 'order')->orderBy('order', 'asc')->get();
 
-        // Obtener productos relacionados por marca y modelo
         $productosRelacionados = Producto::where('id', '!=', $producto->id)->orderBy('order', 'asc')->take(3)->get();
 
         return view('producto', [
@@ -168,12 +168,12 @@ class ProductoController extends Controller
         $qty = $request->input('qty', 1); // Valor por defecto para qty
         $carrito = Cart::content();
 
-        $query = Producto::with(['imagenes', 'marcas', 'modelos', 'precio'])->orderBy('order', 'asc');
+        $query = Producto::with(['imagenes', 'categoria', 'subcategoria', 'precio', 'material', 'terminacion'])->orderBy('order', 'asc');
 
         // Filtrar por código del subproducto
 
         if ($request->filled('id')) {
-            $query->whereHas('marcas', function ($q) use ($request) {
+            $query->whereHas('categoria', function ($q) use ($request) {
                 $q->where('categoria_id', $request->id);
             });
         }
@@ -234,16 +234,12 @@ class ProductoController extends Controller
         $categorias = Categoria::orderBy('order', 'asc')->get();
         $subcategorias = SubCategoria::orderBy('order', 'asc')->get();
 
-        $productosOferta = Producto::where('oferta', true)
-            ->with(['imagenes', 'marcas', 'modelos', 'precio'])
-            ->orderBy('order', 'asc')
-            ->get();
+
 
         return inertia('privada/productosPrivada', [
             'productos' => $productos,
             'categorias' => $categorias,
             'subcategorias' => $subcategorias,
-            'productosOferta' => $productosOferta,
             'id' => $request->id ?? null,
             'modelo_id' => $request->modelo_id ?? null,
             'code' => $request->code ?? null,
@@ -393,23 +389,16 @@ class ProductoController extends Controller
             'order' => 'nullable|sometimes|max:255',
             'name' => 'required|string|max:255',
             'code' => 'required|string|max:255',
-            'code_oem' => 'nullable|sometimes|string|max:255',
-            'code_competitor' => 'nullable|sometimes|string|max:255',
             'medida' => 'nullable|string|max:255',
-            'desc_visible' => 'nullable|string',
-            'desc_invisible' => 'nullable|string',
-            'unidad_pack' => 'nullable|integer',
-            'stock' => 'nullable|integer',
-            'descuento_oferta' => 'nullable|integer',
-            'modelos' => 'nullable|array',
-            'modelos.*' => 'integer|exists:sub_categorias,id', // Cada elemento debe ser un ID válido
+            'unidad_minima' => 'nullable|integer',
+            'descuento' => 'nullable|integer',
             'destacado' => 'nullable|sometimes|boolean',
-            'oferta' => 'nullable|sometimes|boolean',
-            'marcas' => 'nullable|array',
-            'marcas.*' => 'integer|exists:categorias,id',
-            // Validaciones de las imágenes (opcionales)
+            'categoria_id' => 'required|exists:categorias,id',
+            'sub_categoria_id' => 'required|exists:sub_categorias,id',
+            'terminacion_id' => 'required|exists:terminaciones,id',
+            'material_id' => 'required|exists:materiales,id',
             'images' => 'nullable|array|min:1',
-            'images.*' => 'required|file|image', // máximo 2MB por imagen
+            'images.*' => 'required|file|image',
         ]);
 
         try {
@@ -418,16 +407,15 @@ class ProductoController extends Controller
                 $producto = Producto::create([
                     'name' => $data['name'],
                     'code' => $data['code'],
-                    'code_oem' => $data['code_oem'],
-                    'code_competitor' => $data['code_competitor'],
-                    'desc_visible' => $data['desc_visible'],
-                    'desc_invisible' => $data['desc_invisible'],
                     'destacado' => $data['destacado'] ?? false,
-                    'descuento_oferta' => $data['descuento_oferta'] ?? 0,
-                    'oferta' => $data['oferta'] ?? false,
-                    'unidad_pack' => $data['unidad_pack'],
-
-                    'stock' => $data['stock'],
+                    'descuento' => $data['descuento'] ?? 0,
+                    'unidad_minima' => $data['unidad_minima'] ?? 1,
+                    'order' => $data['order'] ?? 'zzz',
+                    'medida' => $data['medida'],
+                    'categoria_id' => $data['categoria_id'],
+                    'sub_categoria_id' => $data['sub_categoria_id'],
+                    'terminacion_id' => $data['terminacion_id'],
+                    'material_id' => $data['material_id'],
                 ]);
 
                 $createdImages = [];
@@ -448,24 +436,6 @@ class ProductoController extends Controller
                         $createdImages[] = $imageRecord;
                     }
                 }
-
-                if ($request->has('modelos')) {
-                    foreach ($data['modelos'] as $modeloId) {
-                        ProductoModelo::create([
-                            'producto_id' => $producto->id,
-                            'sub_categoria_id' => $modeloId,
-                        ]);
-                    }
-                }
-
-                if ($request->has('marcas')) {
-                    foreach ($data['marcas'] as $marcaId) {
-                        ProductoMarca::create([
-                            'producto_id' => $producto->id,
-                            'categoria_id' => $marcaId,
-                        ]);
-                    }
-                }
             });
         } catch (\Exception $e) {
             return response()->json([
@@ -484,21 +454,14 @@ class ProductoController extends Controller
             'order' => 'nullable|sometimes|max:255',
             'name' => 'required|string|max:255',
             'code' => 'required|string|max:255',
-            'code_oem' => 'nullable|sometimes|string|max:255',
-            'code_competitor' => 'nullable|sometimes|string|max:255',
             'medida' => 'nullable|string|max:255',
-            'desc_visible' => 'nullable|string',
-            'desc_invisible' => 'nullable|string',
-            'unidad_pack' => 'nullable|integer',
-            'stock' => 'nullable|integer',
-            'descuento_oferta' => 'nullable|integer',
-            'modelos' => 'nullable|array',
-            'modelos.*' => 'integer|exists:sub_categorias,id',
-            'marcas' => 'nullable|array',
-            'marcas.*' => 'integer|exists:categorias,id',
+            'unidad_minima' => 'nullable|integer',
+            'descuento' => 'nullable|integer',
             'destacado' => 'nullable|sometimes|boolean',
-            'oferta' => 'nullable|sometimes|boolean',
-            // Validaciones de las imágenes (opcionales)
+            'categoria_id' => 'required|exists:categorias,id',
+            'sub_categoria_id' => 'required|exists:sub_categorias,id',
+            'terminacion_id' => 'required|exists:terminaciones,id',
+            'material_id' => 'required|exists:materiales,id',
             'images' => 'nullable|array|min:1',
             'images.*' => 'required|file|image',
             // Para eliminar imágenes existentes
@@ -516,15 +479,14 @@ class ProductoController extends Controller
                     'order' => $data['order'],
                     'name' => $data['name'],
                     'code' => $data['code'],
-                    'code_oem' => $data['code_oem'],
-                    'code_competitor' => $data['code_competitor'],
-                    'desc_visible' => $data['desc_visible'],
-                    'desc_invisible' => $data['desc_invisible'],
                     'destacado' => $data['destacado'] ?? false,
-                    'oferta' => $data['oferta'] ?? false,
-                    'descuento_oferta' => $data['descuento_oferta'] ?? 0,
-                    'unidad_pack' => $data['unidad_pack'],
-                    'stock' => $data['stock'],
+                    'descuento' => $data['descuento'] ?? 0,
+                    'unidad_minima' => $data['unidad_minima'],
+                    'medida' => $data['medida'],
+                    'categoria_id' => $data['categoria_id'],
+                    'sub_categoria_id' => $data['sub_categoria_id'],
+                    'terminacion_id' => $data['terminacion_id'],
+                    'material_id' => $data['material_id'],
                 ]);
 
                 if ($request->has('images_to_delete')) {
@@ -586,32 +548,7 @@ class ProductoController extends Controller
                 }
 
                 // Actualizar relaciones con modelos
-                if ($request->has('modelos')) {
-                    // Eliminar relaciones existentes
 
-
-                    // Crear nuevas relaciones
-                    foreach ($data['modelos'] as $modeloId) {
-                        ProductoModelo::create([
-                            'producto_id' => $producto->id,
-                            'sub_categoria_id' => $modeloId,
-                        ]);
-                    }
-                }
-
-                // Actualizar relaciones con marcas
-                if ($request->has('marcas')) {
-                    // Eliminar relaciones existentes
-
-
-                    // Crear nuevas relaciones
-                    foreach ($data['marcas'] as $marcaId) {
-                        ProductoMarca::create([
-                            'producto_id' => $producto->id,
-                            'categoria_id' => $marcaId,
-                        ]);
-                    }
-                }
             });
         } catch (\Exception $e) {
             return response()->json([
@@ -645,11 +582,7 @@ class ProductoController extends Controller
                     $imagen->delete();
                 }
 
-                // Eliminar relaciones con modelos
-                ProductoModelo::where('producto_id', $producto->id)->delete();
 
-                // Eliminar relaciones con marcas
-                ProductoMarca::where('producto_id', $producto->id)->delete();
 
                 // Eliminar el producto
                 $producto->delete();
@@ -720,5 +653,12 @@ class ProductoController extends Controller
         } else {
             return redirect('/p/' . $producto->code);
         }
+    }
+
+    public function productosBanner()
+    {
+        $productos = Banner::where('name', 'productos')->first();
+
+        return Inertia::render('admin/productosBanner', ['productos' => $productos]);
     }
 }

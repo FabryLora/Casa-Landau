@@ -29,7 +29,7 @@ class   PrivadaController extends Controller
         $productosIds = $carrito->pluck('id')->toArray();
 
         // Traer todos los productos con esos IDs
-        $productos = Producto::whereIn('id', $productosIds)->with(['imagenes', 'marcas', 'modelos', 'precio'])->get();
+        $productos = Producto::whereIn('id', $productosIds)->with(['imagenes', 'categoria', 'subcategoria', 'precio', 'terminacion', 'material'])->get();
 
         $productosConRowId = $productos->map(function ($producto) use ($carrito) {
             // Buscar el item del carrito que corresponde a este producto
@@ -146,12 +146,54 @@ class   PrivadaController extends Controller
         // Enviar correo al administrador (o a la dirección que desees)
         Mail::to(Contacto::first()->mail_pedidos)->send(new PedidoMail($pedido, $request->file('archivo')));
 
+
+        $mensajeWhatsApp = $this->formatearMensajePedido($pedido);
+
+        // Opción 1: Enviar con Twilio (automático)
+        if (config('services.twilio.sid')) {
+            $whatsappService = new \App\Services\WhatsAppService();
+            $whatsappService->enviarMensaje(
+                config('services.twilio.whatsapp_to'),
+                $mensajeWhatsApp
+            );
+        }
+
         Cart::destroy();
 
         // Devolver mensaje de éxito al usuario
         session([
             'pedido_id' => $pedido->id,
         ]);
+    }
+
+    private function formatearMensajePedido($pedido)
+    {
+        $usuario = $pedido->user;
+        $productos = $pedido->productos;
+
+        $mensaje = "🛒 *NUEVO PEDIDO* 🛒\n\n";
+        $mensaje .= "👤 *Cliente:* {$usuario->name}\n";
+        $mensaje .= "📧 *Email:* {$usuario->email}\n";
+        $mensaje .= "🆔 *Pedido #:* {$pedido->id}\n";
+        $mensaje .= "🚚 *Tipo de entrega:* {$pedido->tipo_entrega}\n";
+        $mensaje .= "💳 *Forma de pago:* {$pedido->forma_pago}\n\n";
+
+        $mensaje .= "📋 *PRODUCTOS:*\n";
+        foreach ($productos as $producto) {
+            $mensaje .= "• {$producto->producto->nombre} x{$producto->cantidad} - $" . number_format($producto->precio_unitario, 2) . "\n";
+        }
+
+        $mensaje .= "\n💰 *TOTALES:*\n";
+        $mensaje .= "Subtotal: $" . number_format($pedido->subtotal, 2) . "\n";
+        $mensaje .= "IVA: $" . number_format($pedido->iva, 2) . "\n";
+        $mensaje .= "Descuento: $" . number_format($pedido->descuento, 2) . "\n";
+        $mensaje .= "🔥 *TOTAL: $" . number_format($pedido->total, 2) . "*\n";
+
+        if ($pedido->mensaje) {
+            $mensaje .= "\n📝 *Mensaje:* {$pedido->mensaje}";
+        }
+
+        return $mensaje;
     }
 
     public function sendInformacion(Request $request)

@@ -2,7 +2,7 @@
 @section('title', 'Autopartes TB')
 
 @section('content')
-    <div class="flex flex-col gap-10 max-sm:gap-6">
+    <div class="flex flex-col gap-10 max-sm:gap-6 my-10">
 
         <!-- Breadcrumb navigation -->
         <div class="hidden lg:block w-[1200px] max-sm:w-full max-sm:px-4 mx-auto h-full mt-10 max-sm:mt-6">
@@ -24,11 +24,11 @@
                     @foreach ($categorias as $cat)
                         <div class="border-b border-gray-200"
                             x-data="{ 
-                                open: {{ $modelo_id && $cat->subCategorias && $cat->subCategorias->where('id', $modelo_id ?? null)->count() > 0 ? 'true' : 'false' }} 
+                                open: {{ $rubro_id && $cat->subCategorias && $cat->subCategorias->where('id', $rubro_id ?? null)->count() > 0 ? 'true' : 'false' }} 
                              }">
                             <div
-                                class="flex flex-row justify-between items-center py-3 max-sm:py-2 px-2 transition-all duration-300 ease-in-out text-lg max-sm:text-base {{ $categoria && $cat->id == $categoria->id ? 'font-semibold' : '' }}">
-                                <a href="{{ route('productos', ['id' => $cat->id]) }}" class="block flex-1">
+                                class="flex flex-row justify-between items-center py-3 max-sm:py-2 px-2 transition-all duration-300 ease-in-out text-lg max-sm:text-base {{ $cat->id == $categoria_id ? 'font-semibold' : '' }}">
+                                <a href="{{ '/productos/' . $cat->id }}" class="block flex-1">
                                     {{ $cat->name }}
                                     @if ($cat->productos_count)
                                         <span
@@ -58,8 +58,8 @@
                                     x-transition:leave-start="opacity-100 transform translate-y-0"
                                     x-transition:leave-end="opacity-0 transform -translate-y-2">
                                     @foreach ($cat->subCategorias as $subCategoria)
-                                        <a href="{{ route('productos', ['id' => $subCategoria->categoria->id, 'modelo_id' => $subCategoria->id]) }}"
-                                            class="block pl-4 max-sm:pl-3 py-2 max-sm:py-1.5 text-[16px] max-sm:text-sm hover:bg-gray-50 transition-colors duration-200 {{ $modelo_id && $subCategoria->id == $modelo_id ? 'font-semibold bg-gray-50' : '' }}">
+                                        <a href="{{ '/productos/' . $cat->id . '?rubro=' . $subCategoria->categoria->id }}"
+                                            class="block pl-4 max-sm:pl-3 py-2 max-sm:py-1.5 text-[16px] max-sm:text-sm hover:bg-gray-50 transition-colors duration-200 {{ $rubro_id && $subCategoria->id == $rubro_id ? 'font-semibold bg-gray-50' : '' }}">
                                             {{ $subCategoria->name }}
                                             @if ($subCategoria->productos_count)
                                                 <span
@@ -81,33 +81,27 @@
                     @forelse($productos as $producto)
                         <a href="{{ "/p/" . $producto->code }}" 
                             class="border-gray-200 transition transform hover:-translate-y-1 hover:shadow-lg duration-300
-                            h-[349px] max-sm:h-auto flex flex-col">
+                            h-[400px] max-sm:h-auto flex flex-col border shadow-sm rounded-lg group">
                             <div class="h-full flex flex-col">
                                 @if ($producto->imagenes->count() > 0)
                                     <img src="{{ $producto->imagenes->first()->image }}" alt="{{ $producto->name }}"
-                                        class="bg-gray-100 w-full min-h-[243px] max-sm:h-[200px] object-cover ">
+                                        class="bg-gray-100 w-full min-h-[288px] max-sm:h-[200px] object-cover rounded-t-lg">
                                 @else
                                     <div class="w-full min-h-[243px] max-sm:min-h-[200px] bg-gray-100 flex items-center justify-center text-gray-500 ">
                                         <span>Sin imagen</span>
                                     </div>
                                 @endif
-                                <div class="flex flex-col justify-center h-full max-sm:p-3">
+                                <div class="flex flex-col px-4 py-5 gap-3 h-full max-sm:p-3">
                                     <h3
-                                        class="text-primary-orange group-hover:text-green-700 text-[16px] max-sm:text-sm transition-colors duration-300">
-                                        {{ $producto->code }}
+                                        class="text-primary-orange  text-[14px] max-sm:text-sm transition-colors duration-300 uppercase font-bold">
+                                        {{ $producto->categoria->name }}
                                     </h3>
-                                    <div class="flex flex-row gap-2">
-                                        @foreach ($producto->marcas as $marca)
-                                            <p class="text-gray-800 max-sm:text-sm transition-colors duration-300 ">
-                                                {{ $marca->marca->name ?? 'Marca no disponible' }} -
-                                            </p>
-                                        @endforeach
-                                    </div>
+                                    
 
-                                    <p
-                                        class="text-gray-800 text-[15px] max-sm:text-sm font-semibold transition-colors duration-300 line-clamp-2 overflow-hidden break-words">
+                                    <h2
+                                        class="text-gray-800 text-[16px] max-sm:text-sm transition-colors duration-300 line-clamp-2 overflow-hidden break-words">
                                         {{ $producto->name }}
-                                    </p>
+                                    </h2>
                                 </div>
                             </div>
                         </a>

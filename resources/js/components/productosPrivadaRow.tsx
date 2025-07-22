@@ -9,7 +9,7 @@ export default function ProductosPrivadaRow({ producto, margenSwitch, margen }) 
     const { auth, ziggy } = usePage().props;
     const { user } = auth;
 
-    const [cantidad, setCantidad] = useState(producto?.qty != 1 ? producto?.qty : producto?.unidad_pack);
+    const [cantidad, setCantidad] = useState(producto?.qty != 1 ? producto?.qty : producto?.unidad_minima);
 
     useEffect(() => {
         if (producto?.rowId) {
@@ -76,66 +76,28 @@ export default function ProductosPrivadaRow({ producto, margenSwitch, margen }) 
     return (
         <>
             {/* Vista desktop - tabla */}
-            <div className="grid h-fit grid-cols-9 items-center border-b border-gray-200 py-2 text-[15px] text-black max-sm:hidden">
-                <div className="h-[85px] w-[85px]">
+            <div className="grid h-fit grid-cols-10 items-center border-b border-gray-200 py-2 text-[15px] text-black max-sm:hidden">
+                <div className="h-[85px] w-[85px] rounded-lg border shadow-sm">
                     <img src={producto?.imagenes[0]?.image} className="h-full w-full object-contain" alt="" />
                 </div>
                 <p className="">{producto?.code}</p>
                 {/* mostrar uno debajo del otro */}
-                <p className="">
-                    {producto?.code_oem?.split('/').map((item) => (
-                        <span key={item} className="block">
-                            {item}
-                        </span>
-                    ))}
-                </p>
                 <p className="">{producto?.name}</p>
+                <p className="">{producto?.terminacion?.name}</p>
 
-                {margenSwitch ? (
-                    <div className="relative">
-                        {producto?.oferta == 1 && <p className="absolute -top-5 w-full text-right text-xs font-bold text-green-500">OFERTA</p>}
-                        <p className="text-right">
-                            ${' '}
-                            {(
-                                Number(
-                                    producto?.oferta == 1
-                                        ? Number(producto?.precio?.precio) * (1 - Number(producto?.descuento_oferta) / 100)
-                                        : Number(producto?.precio?.precio),
-                                ) *
-                                (1 - Number(margen) / 100)
-                            )?.toLocaleString('es-AR', {
-                                maximumFractionDigits: 2,
-                                minimumFractionDigits: 2,
-                            })}
-                        </p>
-                        <p className="absolute w-full text-right text-gray-400 line-through">
-                            ${' '}
-                            {Number(
-                                producto?.oferta == 1
-                                    ? Number(producto?.precio?.precio) * (1 - Number(producto?.descuento_oferta) / 100)
-                                    : Number(producto?.precio?.precio),
-                            )?.toLocaleString('es-AR', { maximumFractionDigits: 2, minimumFractionDigits: 2 })}
-                        </p>
-                    </div>
-                ) : (
-                    <div className="relative">
-                        {producto?.oferta == 1 && <p className="absolute -top-5 w-full text-right text-xs font-bold text-green-500">OFERTA</p>}
-                        <p className="text-right">
-                            ${' '}
-                            {Number(
-                                producto?.oferta == 1
-                                    ? Number(producto?.precio?.precio) * (1 - Number(producto?.descuento_oferta) / 100)
-                                    : producto?.precio?.precio,
-                            )?.toLocaleString('es-AR', { maximumFractionDigits: 2, minimumFractionDigits: 2 })}
-                        </p>
-                    </div>
-                )}
+                <p>{producto?.material?.name}</p>
+
+                <p>$ {Number(producto?.precio?.precio).toLocaleString('es-AR', { maximumFractionDigits: 2, minimumFractionDigits: 2 })}</p>
+
+                <p className="text-center text-green-500">{producto?.descuento}%</p>
+
+                <p>subtotal</p>
 
                 <p className="flex justify-end">
                     <div className="flex h-[38px] w-[99px] flex-row items-center border border-[#EEEEEE] px-2">
                         <input value={cantidad} type="text" className="h-full w-full focus:outline-none" />
                         <div className="flex h-full flex-col justify-center">
-                            <button onClick={() => setCantidad(Number(cantidad) + Number(producto?.unidad_pack))} className="flex items-center">
+                            <button onClick={() => setCantidad(Number(cantidad) + Number(producto?.unidad_minima))} className="flex items-center">
                                 <FontAwesomeIcon icon={faChevronUp} size="xs" />
                             </button>
                             <button
@@ -152,45 +114,6 @@ export default function ProductosPrivadaRow({ producto, margenSwitch, margen }) 
                             </button>
                         </div>
                     </div>
-                </p>
-
-                {margenSwitch ? (
-                    <div className="relative">
-                        <p className="text-right">
-                            ${' '}
-                            {(
-                                Number(
-                                    producto?.oferta == 1
-                                        ? Number(producto?.precio?.precio) * cantidad * (1 - Number(producto?.descuento_oferta) / 100)
-                                        : Number(producto?.precio?.precio) * cantidad,
-                                ) *
-                                (1 - Number(margen) / 100)
-                            )?.toLocaleString('es-AR', {
-                                maximumFractionDigits: 2,
-                                minimumFractionDigits: 2,
-                            })}
-                        </p>
-                        <p className="absolute w-full text-right text-gray-400 line-through">
-                            ${' '}
-                            {Number(
-                                producto?.oferta == 1
-                                    ? Number(producto?.precio?.precio) * cantidad * (1 - Number(producto?.descuento_oferta) / 100)
-                                    : producto?.precio?.precio * cantidad,
-                            )?.toLocaleString('es-AR', { maximumFractionDigits: 2, minimumFractionDigits: 2 })}
-                        </p>
-                    </div>
-                ) : (
-                    <p className="text-right">
-                        ${' '}
-                        {Number(
-                            producto?.oferta == 1
-                                ? Number(producto?.precio?.precio) * cantidad * (1 - Number(producto?.descuento_oferta) / 100)
-                                : producto?.precio?.precio * cantidad,
-                        )?.toLocaleString('es-AR', { maximumFractionDigits: 2, minimumFractionDigits: 2 })}
-                    </p>
-                )}
-                <p className="flex justify-center">
-                    <div className="h-[12px] w-[12px] rounded-full bg-gray-200"></div>
                 </p>
 
                 <p className="flex justify-center">

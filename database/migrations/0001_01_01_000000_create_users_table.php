@@ -16,9 +16,6 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('email')->nullable();
-            $table->string('email_dos')->nullable();
-            $table->string('email_tres')->nullable();
-            $table->string('email_cuatro')->nullable();
             $table->string('razon_social')->nullable();
             $table->string('password');
             $table->string("cuit");

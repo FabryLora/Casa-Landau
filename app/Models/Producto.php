@@ -16,14 +16,14 @@ class Producto extends Model
     {
         return $this->belongsTo(SubCategoria::class, 'sub_categoria_id');
     }
-
-    public function modelos()
+    public function terminacion()
     {
-        return $this->hasMany(ProductoModelo::class);
+        return $this->belongsTo(Terminaciones::class, 'terminacion_id');
     }
-    public function marcas()
+
+    public function material()
     {
-        return $this->hasMany(ProductoMarca::class);
+        return $this->belongsTo(Materiales::class, 'material_id');
     }
 
     public function imagenes()
@@ -31,10 +31,7 @@ class Producto extends Model
         return $this->hasMany(ImagenProducto::class, 'producto_id');
     }
 
-    public function subproductos()
-    {
-        return $this->hasMany(SubProducto::class);
-    }
+
 
     public function getImageAttribute($value)
     {

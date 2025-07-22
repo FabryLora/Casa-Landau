@@ -40,7 +40,7 @@
     </div>
 
     <div className="max-w-[1200px] mx-auto flex justify-center h-[688px]">
-        <video className="w-full h-full object-cover rounded-lg" src="{{$nosotros->video}}" controls></video>
+        <video className="w-full h-full object-cover rounded-lg" src="{{$nosotros->video ?? ""}}" controls></video>
     </div>
 
 
