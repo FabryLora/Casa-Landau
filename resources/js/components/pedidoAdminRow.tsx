@@ -249,9 +249,9 @@ export default function PedidoAdminRow({ pedido }) {
                         name="estado"
                         id=""
                     >
-                        <option value="Pendiente">Pendiente</option>
-                        <option value="En Proceso">En Proceso</option>
-                        <option value="Completado">Completado</option>
+                        <option value="Entrega pendiente">Entrega pendiente</option>
+                        <option value="Entregado parcialmente">Entregado parcialmente</option>
+                        <option value="Entregado">Entregado</option>
                     </select>
                 </td>
                 <td>

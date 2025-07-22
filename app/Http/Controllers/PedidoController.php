@@ -108,6 +108,17 @@ class PedidoController extends Controller
         ]);
     }
 
+    public function articulosPedidos(Request $request)
+    {
+        $pedidos = Pedido::where('estado', '!=', 'Entregado')->orderBy('created_at', 'desc')
+            ->with(['productos.producto'])
+            ->get();
+
+        return inertia('privada/articulosPedidos', [
+            'pedidos' => $pedidos,
+        ]);
+    }
+
 
     /**
      * Update the specified resource in storage.

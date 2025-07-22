@@ -183,7 +183,7 @@ export default function MispedidosRow({ pedido }) {
                 </div>
             )}
 
-            <div className="grid grid-cols-7 gap-2 border-b py-2 text-[#74716A]">
+            <div className="grid grid-cols-8 gap-2 border-b py-2 text-[#74716A]">
                 <div className="flex items-center">
                     <div className="flex h-[80px] w-[80px] items-center justify-center bg-[#F5F5F5]">
                         <svg xmlns="http://www.w3.org/2000/svg" width="43" height="43" viewBox="0 0 43 43" fill="none">
@@ -197,19 +197,30 @@ export default function MispedidosRow({ pedido }) {
                         </svg>
                     </div>
                 </div>
-                <div className="flex items-center">{pedido?.id}</div>
+                <div className="flex items-center">#{pedido?.id}</div>
                 <div className="flex items-center">{pedido?.created_at}</div>
-                <div className="flex items-center font-bold">{pedido?.estado}</div>
-                <div className="flex items-center">
-                    $ {Number(pedido?.total).toLocaleString('es-AR', { maximumFractionDigits: 2, minimumFractionDigits: 2 })}
+                <div className="flex items-center">desc</div>
+                <div className="flex items-center">{pedido?.estado?.toLowerCase() != 'entrega pendiente' ? pedido?.updated_at : 'No entregado'}</div>
+
+                <div
+                    className={`flex items-center font-bold ${pedido?.estado?.toLowerCase() == 'entregado' && 'text-[#4B8C28]'} ${pedido?.estado?.toLowerCase() == 'entregado parcialmente' && 'text-[#9C9C35]'} ${pedido?.estado?.toLowerCase() == 'entrega pendiente' && 'text-[#B14646]'}`}
+                >
+                    {pedido?.estado}
                 </div>
+
                 <div className="flex items-center">
-                    <button onClick={() => setDetalleView(true)} className="bg-primary-orange h-10 w-full min-w-[138px] font-bold text-white">
+                    <button
+                        onClick={() => setDetalleView(true)}
+                        className="bg-primary-orange h-10 w-full min-w-[138px] rounded-lg font-bold text-white"
+                    >
                         Ver detalles
                     </button>
                 </div>
                 <div className="flex items-center">
-                    <button onClick={recomprar} className="border-primary-orange text-primary-orange h-10 w-full min-w-[138px] border font-medium">
+                    <button
+                        onClick={recomprar}
+                        className="border-primary-orange text-primary-orange h-10 w-full min-w-[138px] rounded-lg border font-medium"
+                    >
                         Recomprar
                     </button>
                 </div>

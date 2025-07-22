@@ -37,73 +37,48 @@ export default function ContactoAdmin() {
             <form onSubmit={handleSubmit} className="flex flex-col gap-4 p-6" action="">
                 <h2 className="border-primary-orange text-primary-orange text-bold w-full border-b-2 text-2xl">Contacto</h2>
                 <div className="grid grid-cols-2 gap-x-6 gap-y-8 max-sm:grid-cols-1">
-                    <div className="col-span-2 grid grid-cols-3 gap-6">
-                        <div className="flex w-full flex-row gap-2">
-                            <div className="w-full">
-                                <label htmlFor="username" className="flex flex-row items-center gap-2 text-sm/6 font-medium text-gray-900">
-                                    <FontAwesomeIcon color="#0072c6" icon={faEnvelope} size="lg" />
-                                    <p>Mail {'(Contacto)'}</p>
-                                </label>
-                                <div className="mt-2">
-                                    <div className="focus-within:outline-primary-orange flex items-center rounded-md bg-white pl-3 outline outline-1 -outline-offset-1 outline-gray-300 focus-within:outline focus-within:outline-2 focus-within:-outline-offset-2">
-                                        <div className="shrink-0 text-base text-gray-500 select-none sm:text-sm/6"></div>
-                                        <input
-                                            value={data.mail}
-                                            onChange={(ev) => {
-                                                setData('mail', ev.target.value);
-                                            }}
-                                            id="username"
-                                            name="username"
-                                            type="text"
-                                            className="block min-w-0 grow py-1.5 pr-3 pl-1 text-base text-gray-900 placeholder:text-gray-400 focus:outline focus:outline-0 sm:text-sm/6"
-                                        />
-                                    </div>
+                    <div className="flex w-full flex-row gap-2">
+                        <div className="w-full">
+                            <label htmlFor="username" className="flex flex-row items-center gap-2 text-sm/6 font-medium text-gray-900">
+                                <FontAwesomeIcon color="#0072c6" icon={faEnvelope} size="lg" />
+                                <p>Mail {'(Contacto)'}</p>
+                            </label>
+                            <div className="mt-2">
+                                <div className="focus-within:outline-primary-orange flex items-center rounded-md bg-white pl-3 outline outline-1 -outline-offset-1 outline-gray-300 focus-within:outline focus-within:outline-2 focus-within:-outline-offset-2">
+                                    <div className="shrink-0 text-base text-gray-500 select-none sm:text-sm/6"></div>
+                                    <input
+                                        value={data.mail}
+                                        onChange={(ev) => {
+                                            setData('mail', ev.target.value);
+                                        }}
+                                        id="username"
+                                        name="username"
+                                        type="text"
+                                        className="block min-w-0 grow py-1.5 pr-3 pl-1 text-base text-gray-900 placeholder:text-gray-400 focus:outline focus:outline-0 sm:text-sm/6"
+                                    />
                                 </div>
                             </div>
                         </div>
-                        <div className="flex w-full flex-row gap-2">
-                            <div className="w-full">
-                                <label htmlFor="mail_info" className="flex flex-row items-center gap-2 text-sm/6 font-medium text-gray-900">
-                                    <FontAwesomeIcon color="#0072c6" icon={faEnvelope} size="lg" />
-                                    <p>Mail {'(Informacion de pago)'}</p>
-                                </label>
-                                <div className="mt-2">
-                                    <div className="focus-within:outline-primary-orange flex items-center rounded-md bg-white pl-3 outline outline-1 -outline-offset-1 outline-gray-300 focus-within:outline focus-within:outline-2 focus-within:-outline-offset-2">
-                                        <div className="shrink-0 text-base text-gray-500 select-none sm:text-sm/6"></div>
-                                        <input
-                                            value={data.mail_info}
-                                            onChange={(ev) => {
-                                                setData('mail_info', ev.target.value);
-                                            }}
-                                            id="mail_info"
-                                            name="mail_info"
-                                            type="text"
-                                            className="block min-w-0 grow py-1.5 pr-3 pl-1 text-base text-gray-900 placeholder:text-gray-400 focus:outline focus:outline-0 sm:text-sm/6"
-                                        />
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="flex w-full flex-row gap-2">
-                            <div className="w-full">
-                                <label htmlFor="pedidos" className="flex flex-row items-center gap-2 text-sm/6 font-medium text-gray-900">
-                                    <FontAwesomeIcon color="#0072c6" icon={faEnvelope} size="lg" />
-                                    <p>Mail {'(Pedidos)'}</p>
-                                </label>
-                                <div className="mt-2">
-                                    <div className="focus-within:outline-primary-orange flex items-center rounded-md bg-white pl-3 outline outline-1 -outline-offset-1 outline-gray-300 focus-within:outline focus-within:outline-2 focus-within:-outline-offset-2">
-                                        <div className="shrink-0 text-base text-gray-500 select-none sm:text-sm/6"></div>
-                                        <input
-                                            value={data.mail_pedidos}
-                                            onChange={(ev) => {
-                                                setData('mail_pedidos', ev.target.value);
-                                            }}
-                                            id="pedidos"
-                                            name="pedidos"
-                                            type="text"
-                                            className="block min-w-0 grow py-1.5 pr-3 pl-1 text-base text-gray-900 placeholder:text-gray-400 focus:outline focus:outline-0 sm:text-sm/6"
-                                        />
-                                    </div>
+                    </div>
+                    <div className="flex w-full flex-row gap-2">
+                        <div className="w-full">
+                            <label htmlFor="mail_info" className="flex flex-row items-center gap-2 text-sm/6 font-medium text-gray-900">
+                                <FontAwesomeIcon color="#0072c6" icon={faEnvelope} size="lg" />
+                                <p>Mail {'(Informacion de pago)'}</p>
+                            </label>
+                            <div className="mt-2">
+                                <div className="focus-within:outline-primary-orange flex items-center rounded-md bg-white pl-3 outline outline-1 -outline-offset-1 outline-gray-300 focus-within:outline focus-within:outline-2 focus-within:-outline-offset-2">
+                                    <div className="shrink-0 text-base text-gray-500 select-none sm:text-sm/6"></div>
+                                    <input
+                                        value={data.mail_info}
+                                        onChange={(ev) => {
+                                            setData('mail_info', ev.target.value);
+                                        }}
+                                        id="mail_info"
+                                        name="mail_info"
+                                        type="text"
+                                        className="block min-w-0 grow py-1.5 pr-3 pl-1 text-base text-gray-900 placeholder:text-gray-400 focus:outline focus:outline-0 sm:text-sm/6"
+                                    />
                                 </div>
                             </div>
                         </div>

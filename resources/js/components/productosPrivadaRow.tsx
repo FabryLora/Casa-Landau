@@ -85,13 +85,22 @@ export default function ProductosPrivadaRow({ producto, margenSwitch, margen }) 
                 <p className="">{producto?.name}</p>
                 <p className="">{producto?.terminacion?.name}</p>
 
-                <p>{producto?.material?.name}</p>
+                <p className="text-center">{producto?.material?.name}</p>
 
-                <p>$ {Number(producto?.precio?.precio).toLocaleString('es-AR', { maximumFractionDigits: 2, minimumFractionDigits: 2 })}</p>
+                <p className="text-right">
+                    $ {Number(producto?.precio?.precio).toLocaleString('es-AR', { maximumFractionDigits: 2, minimumFractionDigits: 2 })}
+                </p>
 
                 <p className="text-center text-green-500">{producto?.descuento}%</p>
 
-                <p>subtotal</p>
+                <p className="text-right text-sm font-medium text-gray-900">
+                    ${' '}
+                    {Number(
+                        producto?.oferta == 1
+                            ? Number(producto?.precio?.precio) * cantidad * (1 - Number(producto?.descuento_oferta) / 100)
+                            : producto?.precio?.precio * cantidad,
+                    )?.toLocaleString('es-AR', { maximumFractionDigits: 2, minimumFractionDigits: 2 })}
+                </p>
 
                 <p className="flex justify-end">
                     <div className="flex h-[38px] w-[99px] flex-row items-center border border-[#EEEEEE] px-2">
@@ -103,8 +112,8 @@ export default function ProductosPrivadaRow({ producto, margenSwitch, margen }) 
                             <button
                                 onClick={() =>
                                     setCantidad(
-                                        Number(cantidad) > producto?.unidad_pack
-                                            ? Number(cantidad) - Number(producto?.unidad_pack)
+                                        Number(cantidad) > producto?.unidad_minima
+                                            ? Number(cantidad) - Number(producto?.unidad_minima)
                                             : Number(cantidad),
                                     )
                                 }
@@ -225,14 +234,14 @@ export default function ProductosPrivadaRow({ producto, margenSwitch, margen }) 
                         <div className="flex h-[32px] w-[80px] flex-row items-center rounded border border-[#EEEEEE] px-2">
                             <input value={cantidad} type="text" className="h-full w-full text-center text-sm focus:outline-none" readOnly />
                             <div className="flex h-full flex-col justify-center">
-                                <button onClick={() => setCantidad(Number(cantidad) + Number(producto?.unidad_pack))} className="flex items-center">
+                                <button onClick={() => setCantidad(Number(cantidad) + Number(producto?.unidad_minima))} className="flex items-center">
                                     <FontAwesomeIcon icon={faChevronUp} size="xs" />
                                 </button>
                                 <button
                                     onClick={() =>
                                         setCantidad(
-                                            Number(cantidad) > producto?.unidad_pack
-                                                ? Number(cantidad) - Number(producto?.unidad_pack)
+                                            Number(cantidad) > producto?.unidad_minima
+                                                ? Number(cantidad) - Number(producto?.unidad_minima)
                                                 : Number(cantidad),
                                         )
                                     }
@@ -253,41 +262,6 @@ export default function ProductosPrivadaRow({ producto, margenSwitch, margen }) 
                     {/* Botón de acción */}
                     <div className="flex items-center gap-2">
                         {/* Subtotal */}
-                        {margenSwitch ? (
-                            <div className="text-right">
-                                <p className="text-sm font-medium text-gray-900">
-                                    ${' '}
-                                    {(
-                                        Number(
-                                            producto?.oferta == 1
-                                                ? Number(producto?.precio?.precio) * cantidad * (1 - Number(producto?.descuento_oferta) / 100)
-                                                : Number(producto?.precio?.precio) * cantidad,
-                                        ) *
-                                        (1 - Number(margen) / 100)
-                                    )?.toLocaleString('es-AR', {
-                                        maximumFractionDigits: 2,
-                                        minimumFractionDigits: 2,
-                                    })}
-                                </p>
-                                <p className="text-xs text-gray-400 line-through">
-                                    ${' '}
-                                    {Number(
-                                        producto?.oferta == 1
-                                            ? Number(producto?.precio?.precio) * cantidad * (1 - Number(producto?.descuento_oferta) / 100)
-                                            : producto?.precio?.precio * cantidad,
-                                    )?.toLocaleString('es-AR', { maximumFractionDigits: 2, minimumFractionDigits: 2 })}
-                                </p>
-                            </div>
-                        ) : (
-                            <p className="text-sm font-medium text-gray-900">
-                                ${' '}
-                                {Number(
-                                    producto?.oferta == 1
-                                        ? Number(producto?.precio?.precio) * cantidad * (1 - Number(producto?.descuento_oferta) / 100)
-                                        : producto?.precio?.precio * cantidad,
-                                )?.toLocaleString('es-AR', { maximumFractionDigits: 2, minimumFractionDigits: 2 })}
-                            </p>
-                        )}
 
                         {/* Botón */}
                         {ziggy.location.includes('carrito') ? (

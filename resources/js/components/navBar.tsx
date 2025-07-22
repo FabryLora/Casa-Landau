@@ -8,6 +8,8 @@ const Navbar = () => {
 
     const { logos, contacto, auth, carrito } = usePage().props;
 
+    const [userMenu, setUserMenu] = useState(false);
+
     const { user } = auth;
 
     useEffect(() => {
@@ -76,6 +78,15 @@ const Navbar = () => {
                             {link.title}
                         </Link>
                     ))}
+                    {window.location.pathname.includes('privada') && (
+                        <button
+                            onClick={() => setUserMenu(true)}
+                            type="button"
+                            className="border-primary-orange text-primary-orange hover:bg-primary-orange rounded-lg border px-4 py-2 text-sm font-bold transition duration-300 hover:text-white max-sm:px-2 max-sm:text-xs"
+                        >
+                            Zona privada
+                        </button>
+                    )}
                 </div>
 
                 {/* Mobile Menu Button */}

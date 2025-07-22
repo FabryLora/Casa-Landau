@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string("mensaje")->nullable();
             $table->string("archivo")->nullable();
             $table->string("forma_pago")->nullable();
-            $table->string("estado")->default("Pendiente");
+            $table->string("estado")->default("Entrega pendiente");
             $table->decimal("subtotal", 10, 2)->default(0);
             $table->decimal("descuento", 10, 2)->default(0);
             $table->decimal("iva", 10, 2)->default(0);

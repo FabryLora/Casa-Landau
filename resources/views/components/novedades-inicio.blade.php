@@ -10,10 +10,10 @@
                 Ver todas
             </a>
         </div>
-        <div class="flex flex-row max-sm:flex-col gap-6 max-sm:gap-4">
+        <div class="grid grid-cols-3 max-sm:flex-col gap-6 max-sm:gap-4">
             @foreach($novedades as $novedad)
                 <a href="{{ url('/novedades/' . $novedad->id) }}"
-                    class="flex flex-col gap-2 max-w-[392px] max-sm:max-w-full h-fit max-sm:h-auto border shadow-lg rounded-md transition transform hover:-translate-y-1 hover:shadow-lg duration-300">
+                    class="flex flex-col gap-2 max-w-[392px] w-[392px] max-sm:max-w-full h-fit max-sm:h-auto border shadow-lg rounded-md transition transform hover:-translate-y-1 hover:shadow-lg duration-300">
                     <div class="max-w-[391px] max-sm:max-w-full min-h-[321px] h-[260px] rounded-t-lg">
                         <img src="{{ $novedad->image }}" alt="{{ $novedad->title }}"
                             class="h-full w-full object-cover rounded-t-lg object-center">

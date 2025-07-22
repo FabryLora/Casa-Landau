@@ -30,6 +30,7 @@ Route::get('/p/{codigo}', [ProductoController::class, 'show'])->name('producto')
 Route::get('/busqueda', [ProductoController::class, 'SearchProducts'])->name('searchproducts');
 
 
+
 # ------------------------------------------------------------------- #
 // Ruta para la API de búsqueda (AJAX)
 Route::post('/api/search', [SearchController::class, 'search'])

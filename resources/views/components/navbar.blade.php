@@ -58,7 +58,7 @@
             @foreach(($isPrivate ? $privateLinks : $defaultLinks) as $link)
                 <a href="{{ $link['href'] }}"
                     class="text-sm hover:text-primary-orange transition-colors duration-300 text-black 
-                                                                                                                                                                                                                    {{ Request::is(ltrim($link['href'], '/')) ? 'font-bold' : '' }}">
+                                                                                                                                                                                                                        {{ Request::is(ltrim($link['href'], '/')) ? 'font-bold' : '' }}">
                     {{ $link['title'] }}
                 </a>
             @endforeach
@@ -82,7 +82,7 @@
             @foreach(($isPrivate ? $privateLinks : $defaultLinks) as $link)
                 <a href="{{ $link['href'] }}"
                     class="block px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 hover:text-primary-orange transition-colors duration-300
-                                                                                                                                                                                                                    {{ Request::is(ltrim($link['href'], '/')) ? 'font-bold bg-orange-50 text-primary-orange' : '' }}"
+                                                                                                                                                                                                                        {{ Request::is(ltrim($link['href'], '/')) ? 'font-bold bg-orange-50 text-primary-orange' : '' }}"
                     @click="mobileMenuOpen = false">
                     {{ $link['title'] }}
                 </a>
@@ -281,86 +281,119 @@
     </div>
 </div>
 
+{{--
 <script>
-    function searchComponent() {
-        return {
-            searchOpen: false,
-            searchQuery: '',
-            showResults: false,
-            isLoading: false,
-            results: [],
-            searchTimeout: null,
+    // Datos de ejemplo con la estructura de Laravel
+    const provinciasData = [
+        {
+            id: 1,
+            name: "Buenos Aires",
+            localidades: [
+                { id: 1, name: "La Plata" },
+                { id: 2, name: "Mar del Plata" },
+                { id: 3, name: "Bahía Blanca" },
+                { id: 4, name: "Tandil" },
+                { id: 5, name: "Olavarría" }
+            ]
+        },
+        {
+            id: 2,
+            name: "Córdoba",
+            localidades: [
+                { id: 6, name: "Córdoba Capital" },
+                { id: 7, name: "Villa Carlos Paz" },
+                { id: 8, name: "Río Cuarto" },
+                { id: 9, name: "Villa María" },
+                { id: 10, name: "San Francisco" }
+            ]
+        },
+        {
+            id: 3,
+            name: "Santa Fe",
+            localidades: [
+                { id: 11, name: "Santa Fe Capital" },
+                { id: 12, name: "Rosario" },
+                { id: 13, name: "Rafaela" },
+                { id: 14, name: "Venado Tuerto" },
+                { id: 15, name: "Reconquista" }
+            ]
+        },
+        {
+            id: 4,
+            name: "Mendoza",
+            localidades: [
+                { id: 16, name: "Mendoza Capital" },
+                { id: 17, name: "San Rafael" },
+                { id: 18, name: "Godoy Cruz" },
+                { id: 19, name: "Maipú" },
+                { id: 20, name: "Luján de Cuyo" }
+            ]
+        }
+    ];
 
-            handleSearch() {
-                // Limpiar timeout anterior
-                if (this.searchTimeout) {
-                    clearTimeout(this.searchTimeout);
-                }
+    // Elementos del DOM
+    const provinciaSelect = document.getElementById('register_provincia');
+    const localidadSelect = document.getElementById('register_localidad');
 
-                // Si el query está vacío, ocultar resultados
-                if (this.searchQuery.trim() === '') {
-                    this.showResults = false;
-                    this.results = [];
-                    return;
-                }
+    // Llenar el select de provincias
+    function populateProvincias() {
+        provinciasData.forEach(provincia => {
+            const option = document.createElement('option');
+            option.value = provincia.id;
+            option.textContent = provincia.name;
+            provinciaSelect.appendChild(option);
+        });
+    }
 
-                // Debounce la búsqueda
-                this.searchTimeout = setTimeout(() => {
-                    this.performSearch();
-                }, 300);
-            },
+    // Filtrar localidades según provincia seleccionada
+    function filterLocalidades(provinciaId) {
+        // Limpiar localidades
+        localidadSelect.innerHTML = '<option value="">Seleccione una localidad</option>';
 
-            async performSearch() {
-                this.isLoading = true;
-                this.showResults = true;
+        if (provinciaId === '' || provinciaId === null) {
+            localidadSelect.disabled = true;
+            return;
+        }
 
-                try {
-                    const response = await fetch('/api/search', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                        },
-                        body: JSON.stringify({
-                            query: this.searchQuery
-                        })
-                    });
+        // Habilitar select de localidades
+        localidadSelect.disabled = false;
 
-                    if (!response.ok) {
-                        throw new Error(`Error ${response.status}: ${response.statusText}`);
-                    }
+        // Encontrar la provincia seleccionada
+        const provinciaSeleccionada = provinciasData.find(p => p.id == provinciaId);
 
-                    const data = await response.json();
-                    this.results = data.products || [];
-                    console.log('Resultados:', this.results);
-
-                } catch (error) {
-                    console.error('Error en la búsqueda:', error);
-                    this.results = [];
-                    alert('Error al realizar la búsqueda. Por favor, intenta nuevamente.');
-                } finally {
-                    this.isLoading = false;
-                }
-            },
-
-
-
-            selectProduct(product) {
-                // Redirigir al producto seleccionado
-                window.location.href = `/p/${product.code}`;
-            },
-
-            viewAllResults() {
-                // Redirigir a la página de resultados completos
-                window.location.href = `/buscar?q=${encodeURIComponent(this.searchQuery)}`;
-            },
-
-            closeSearch() {
-                this.searchOpen = false;
-                this.showResults = false;
-                this.searchQuery = '';
-                this.results = [];
-            }
+        if (provinciaSeleccionada && provinciaSeleccionada.localidades) {
+            // Agregar localidades de la provincia seleccionada
+            provinciaSeleccionada.localidades.forEach(localidad => {
+                const option = document.createElement('option');
+                option.value = localidad.id;
+                option.textContent = localidad.name;
+                localidadSelect.appendChild(option);
+            });
         }
     }
-</script>
+
+    // Event listener para el cambio de provincia
+    provinciaSelect.addEventListener('change', function () {
+        const provinciaId = this.value;
+        filterLocalidades(provinciaId);
+    });
+
+    // Inicializar
+    populateProvincias();
+
+    // Manejar envío del formulario (ejemplo)
+    document.getElementById('registroForm').addEventListener('submit', function (e) {
+        e.preventDefault();
+        const provinciaId = provinciaSelect.value;
+        const localidadId = localidadSelect.value;
+
+        if (provinciaId && localidadId) {
+            const provincia = provinciasData.find(p => p.id == provinciaId);
+            const localidad = provincia ? provincia.localidades.find(l => l.id == localidadId) : null;
+
+            alert(`Provincia: ${provincia?.name}, Localidad: ${localidad?.name}`);
+        } else {
+            alert('Por favor seleccione provincia y localidad');
+        }
+    });
+</script> --}}

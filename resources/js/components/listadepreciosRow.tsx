@@ -1,4 +1,6 @@
 export default function ListaDePreciosRow({ lista }) {
+    console.log(lista);
+
     return (
         <>
             <div className="grid grid-cols-5 gap-2 border-b py-2 text-[#74716A] max-sm:w-full max-sm:grid-cols-1 max-sm:gap-4 max-sm:py-4">
@@ -35,7 +37,9 @@ export default function ListaDePreciosRow({ lista }) {
                 </div>
                 <div className="flex items-center max-sm:mt-2 max-sm:justify-center">
                     <a href={lista?.archivo} target="_blank" rel="noopener noreferrer" className="block w-full max-sm:w-auto">
-                        <button className="bg-primary-orange h-10 w-full min-w-[138px] font-bold text-white max-sm:px-6">Ver Online</button>
+                        <button className="bg-primary-orange h-10 w-full min-w-[138px] rounded-lg font-bold text-white max-sm:px-6">
+                            Ver Online
+                        </button>
                     </a>
                 </div>
             </div>

@@ -332,7 +332,7 @@ export default function Carrito({
                     </div>
                 </div>
 
-                <div className="flex h-[206px] flex-col gap-3 max-sm:order-2 max-sm:col-span-2">
+                <div className="flex h-full flex-col justify-between gap-3 max-sm:order-2 max-sm:col-span-2">
                     <div className="">
                         <h2 className="text-xl font-bold">Escribinos un mensaje</h2>
                     </div>
@@ -340,7 +340,7 @@ export default function Carrito({
                         onChange={(e) => {
                             pedidoForm.setData('mensaje', e.target.value);
                         }}
-                        className="h-[222px] w-full rounded-lg border p-3"
+                        className="h-full w-full rounded-lg border p-3"
                         name=""
                         id=""
                         rows={10}

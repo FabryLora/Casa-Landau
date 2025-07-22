@@ -25,6 +25,7 @@ class AuthenticatedSessionController extends Controller
      */
     public function store(Request $request)
     {
+
         $request->validate([
             'usuario' => 'required', // Campo que puede ser name o email
             'password' => 'required',
@@ -47,9 +48,10 @@ class AuthenticatedSessionController extends Controller
             return redirect()->intended('/privada/productos');
         }
 
-        return back()->withErrors([
-            'login' => 'Las credenciales proporcionadas no son correctas o la cuenta no está autorizada.',
-        ]);
+        return redirect('/')
+            ->withErrors([
+                'usuario' => 'Las credenciales proporcionadas son incorrectas.',
+            ]);
     }
 
     /**

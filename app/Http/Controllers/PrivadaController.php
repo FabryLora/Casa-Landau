@@ -147,16 +147,7 @@ class   PrivadaController extends Controller
         Mail::to(Contacto::first()->mail_pedidos)->send(new PedidoMail($pedido, $request->file('archivo')));
 
 
-        $mensajeWhatsApp = $this->formatearMensajePedido($pedido);
 
-        // Opción 1: Enviar con Twilio (automático)
-        if (config('services.twilio.sid')) {
-            $whatsappService = new \App\Services\WhatsAppService();
-            $whatsappService->enviarMensaje(
-                config('services.twilio.whatsapp_to'),
-                $mensajeWhatsApp
-            );
-        }
 
         Cart::destroy();
 

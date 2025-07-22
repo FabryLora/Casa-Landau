@@ -86,6 +86,9 @@ Route::middleware('auth')->group(function () {
 
         Route::post('recomprar', [PedidoController::class, 'recomprar'])
             ->name('recomprar');
+
+        Route::get('privada/articulos-pedidos', [PedidoController::class, 'articulosPedidos'])
+            ->name('articulos.pedidos');
     });
 
 
