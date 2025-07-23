@@ -57,30 +57,7 @@
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 24px;">
 
             {{-- Información del Pedido --}}
-            <div style="background-color: #f9fafb; padding: 16px; border-radius: 8px;">
-                <h3 style="margin: 0 0 12px 0; font-weight: 600; color: #111827;">
-                    Información del Pedido
-                </h3>
-                <div style="margin-bottom: 8px;">
-                    <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
-                        <span style="color: #6b7280;">Tipo de Entrega:</span>
-                        <span style="font-weight: 500;">{{ $pedido->tipo_entrega }}</span>
-                    </div>
-                    <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
-                        <span style="color: #6b7280;">Tipo de Pago:</span>
-                        <span style="font-weight: 500;">{{ $pedido->forma_pago }}</span>
-                    </div>
-                    @if($pedido->mensaje)
-                        <div style="padding-top: 8px;">
-                            <span style="color: #6b7280;">Mensaje:</span>
-                            <p
-                                style="margin: 4px 0 0 0; padding: 8px; background-color: #ffffff; border: 1px solid #d1d5db; border-radius: 4px; font-size: 14px; color: #374151;">
-                                {{ $pedido->mensaje }}
-                            </p>
-                        </div>
-                    @endif
-                </div>
-            </div>
+
 
             {{-- Resumen de Costos --}}
             <div style="background-color: #f9fafb; padding: 16px; border-radius: 8px;">

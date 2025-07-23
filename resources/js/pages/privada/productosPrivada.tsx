@@ -80,7 +80,7 @@ export default function ProductosPrivada({ categorias, subcategorias }) {
                 <title>Productos</title>
             </Head>
             {vendedorScreen && (
-                <div className="fixed z-[100] flex h-screen w-screen items-center justify-center bg-black/50">
+                <div className="fixed top-0 left-0 z-[100] flex h-screen w-screen items-center justify-center bg-black/50">
                     <div className="flex h-[218px] w-[476px] items-center justify-center bg-white max-sm:h-auto max-sm:w-[90%] max-sm:p-4">
                         <form onSubmit={seleccionarCliente} className="flex w-[350px] flex-col items-center gap-6 max-sm:w-full">
                             <h2 className="text-[16px] font-semibold max-sm:text-[14px]">Seleccionar cliente</h2>

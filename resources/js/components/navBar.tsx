@@ -1,5 +1,5 @@
 import { Link, usePage } from '@inertiajs/react';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 const Navbar = () => {
     const [scrolled, setScrolled] = useState(false);
@@ -11,6 +11,23 @@ const Navbar = () => {
     const [userMenu, setUserMenu] = useState(false);
 
     const { user } = auth;
+
+    const loginRef = useRef(null);
+
+    useEffect(() => {
+        // Close login menu when clicking outside
+        const handleClickOutside = (event) => {
+            if (loginRef.current && !loginRef.current.contains(event.target)) {
+                setShowLogin(false);
+            }
+        };
+
+        document.addEventListener('mousedown', handleClickOutside);
+
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, []);
 
     useEffect(() => {
         // Check if it's home page or not
@@ -66,7 +83,7 @@ const Navbar = () => {
                 </a>
 
                 {/* Desktop Menu */}
-                <div className="hidden items-center gap-20 md:flex">
+                <div className="relative hidden items-center gap-20 md:flex">
                     {linksToRender.map((link) => (
                         <Link
                             key={link.href}
@@ -80,12 +97,39 @@ const Navbar = () => {
                     ))}
                     {window.location.pathname.includes('privada') && (
                         <button
-                            onClick={() => setUserMenu(true)}
+                            onClick={() => setShowLogin(true)}
                             type="button"
                             className="border-primary-orange text-primary-orange hover:bg-primary-orange rounded-lg border px-4 py-2 text-sm font-bold transition duration-300 hover:text-white max-sm:px-2 max-sm:text-xs"
                         >
-                            Zona privada
+                            {auth?.user?.name}
                         </button>
+                    )}
+
+                    {showLogin && <div className="fixed inset-0 bg-black/50 transition-all duration-300" />}
+                    {showLogin && (
+                        <div
+                            ref={loginRef}
+                            className="absolute top-12 right-0 z-50 flex h-fit w-fit flex-col items-center gap-5 rounded-lg border bg-white p-5 transition-all duration-300 max-sm:top-8 max-sm:p-3"
+                        >
+                            <p className="max-sm:text-sm">Bienvenido, {auth?.user?.name}!</p>
+                            {user?.rol === 'vendedor' && (
+                                <Link
+                                    href={route('borrarCliente')}
+                                    className="bg-primary-orange flex h-[48px] w-[328px] items-center justify-center rounded-lg font-bold text-white max-sm:h-[40px] max-sm:w-[250px] max-sm:text-sm"
+                                >
+                                    Elegir cliente
+                                </Link>
+                            )}
+                            <div className="flex flex-col">
+                                <Link
+                                    method="post"
+                                    href={route('logout')}
+                                    className="flex h-[48px] w-[328px] items-center justify-center rounded-lg bg-red-500 font-bold text-white max-sm:h-[40px] max-sm:w-[250px] max-sm:text-sm"
+                                >
+                                    Cerrar sesion
+                                </Link>
+                            </div>
+                        </div>
                     )}
                 </div>
 

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\PedidoExport;
 use App\Mail\InformacionDePagoMail;
 use App\Mail\PedidoMail;
 use App\Models\Categoria;
@@ -15,7 +16,12 @@ use App\Models\User;
 use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
-
+use Maatwebsite\Excel\Facades\Excel;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\IOFactory;
+use PhpOffice\PhpSpreadsheet\Style\Alignment;
+use PhpOffice\PhpSpreadsheet\Style\Fill;
+use PhpOffice\PhpSpreadsheet\Style\Border;
 
 class   PrivadaController extends Controller
 {
@@ -141,6 +147,8 @@ class   PrivadaController extends Controller
             ]);
         }
 
+        $this->actualizarExcelMaestro($pedido);
+
 
 
         // Enviar correo al administrador (o a la dirección que desees)
@@ -157,35 +165,134 @@ class   PrivadaController extends Controller
         ]);
     }
 
-    private function formatearMensajePedido($pedido)
+    private function actualizarExcelMaestro(Pedido $pedido)
     {
-        $usuario = $pedido->user;
-        $productos = $pedido->productos;
+        $nombreArchivo = 'pedidos_maestro.xlsx';
+        $rutaCompleta = storage_path('app/public/pedidos/' . $nombreArchivo);
 
-        $mensaje = "🛒 *NUEVO PEDIDO* 🛒\n\n";
-        $mensaje .= "👤 *Cliente:* {$usuario->name}\n";
-        $mensaje .= "📧 *Email:* {$usuario->email}\n";
-        $mensaje .= "🆔 *Pedido #:* {$pedido->id}\n";
-        $mensaje .= "🚚 *Tipo de entrega:* {$pedido->tipo_entrega}\n";
-        $mensaje .= "💳 *Forma de pago:* {$pedido->forma_pago}\n\n";
-
-        $mensaje .= "📋 *PRODUCTOS:*\n";
-        foreach ($productos as $producto) {
-            $mensaje .= "• {$producto->producto->nombre} x{$producto->cantidad} - $" . number_format($producto->precio_unitario, 2) . "\n";
+        // Crear directorio si no existe
+        if (!file_exists(dirname($rutaCompleta))) {
+            mkdir(dirname($rutaCompleta), 0755, true);
         }
 
-        $mensaje .= "\n💰 *TOTALES:*\n";
-        $mensaje .= "Subtotal: $" . number_format($pedido->subtotal, 2) . "\n";
-        $mensaje .= "IVA: $" . number_format($pedido->iva, 2) . "\n";
-        $mensaje .= "Descuento: $" . number_format($pedido->descuento, 2) . "\n";
-        $mensaje .= "🔥 *TOTAL: $" . number_format($pedido->total, 2) . "*\n";
+        $spreadsheet = null;
 
-        if ($pedido->mensaje) {
-            $mensaje .= "\n📝 *Mensaje:* {$pedido->mensaje}";
+        // Verificar si el archivo ya existe
+        if (file_exists($rutaCompleta)) {
+            // Cargar el Excel existente
+            $spreadsheet = IOFactory::load($rutaCompleta);
+            $sheet = $spreadsheet->getActiveSheet();
+
+            // Encontrar la siguiente fila vacía
+            $ultimaFila = $sheet->getHighestRow();
+            $siguienteFila = $ultimaFila + 1;
+        } else {
+            // Crear nuevo Excel si no existe
+            $spreadsheet = new Spreadsheet();
+            $sheet = $spreadsheet->getActiveSheet();
+            $sheet->setTitle('Registro de Pedidos');
+
+            // Crear encabezados
+            $this->crearEncabezados($sheet);
+            $siguienteFila = 2; // Primera fila de datos después de encabezados
         }
 
-        return $mensaje;
+        // Agregar los productos del nuevo pedido
+        $productos = $pedido->productos()->with('producto')->get();
+
+        foreach ($productos as $pedidoProducto) {
+            $this->agregarFilaPedido($sheet, $siguienteFila, $pedido, $pedidoProducto);
+            $siguienteFila++;
+        }
+
+        // Autoajustar columnas
+        foreach (range('A', 'O') as $col) {
+            $sheet->getColumnDimension($col)->setAutoSize(true);
+        }
+
+        // Guardar el archivo actualizado
+        $writer = IOFactory::createWriter($spreadsheet, 'Xlsx');
+        $writer->save($rutaCompleta);
+
+        // Limpiar memoria
+        $spreadsheet->disconnectWorksheets();
+        unset($spreadsheet);
+
+        return $nombreArchivo;
     }
+
+    private function crearEncabezados($sheet)
+    {
+        $encabezados = [
+            'A1' => 'Pedido ID',
+            'B1' => 'Cliente',
+            'C1' => 'Email Cliente',
+            'D1' => 'Fecha Pedido',
+            'E1' => 'Producto',
+            'F1' => 'Cantidad',
+            'G1' => 'Precio Unitario',
+            'H1' => 'Subtotal Producto',
+            'I1' => 'Descuento',
+            'J1' => 'Subtotal Pedido',
+            'K1' => 'IVA',
+            'L1' => 'Total Pedido',
+            'M1' => 'Mensaje'
+        ];
+
+        // Establecer encabezados
+        foreach ($encabezados as $celda => $valor) {
+            $sheet->setCellValue($celda, $valor);
+        }
+
+        // Estilo para encabezados
+        $sheet->getStyle('A1:M1')->applyFromArray([
+            'font' => [
+                'bold' => true,
+                'color' => ['rgb' => 'FFFFFF']
+            ],
+            'fill' => [
+                'fillType' => Fill::FILL_SOLID,
+                'color' => ['rgb' => '4472C4']
+            ],
+            'alignment' => [
+                'horizontal' => Alignment::HORIZONTAL_CENTER,
+            ],
+            'borders' => [
+                'allBorders' => [
+                    'borderStyle' => Border::BORDER_THIN,
+                ],
+            ],
+        ]);
+    }
+
+    private function agregarFilaPedido($sheet, $fila, $pedido, $pedidoProducto)
+    {
+        $sheet->setCellValue('A' . $fila, $pedido->id);
+        $sheet->setCellValue('B' . $fila, $pedido->user->name ?? 'Cliente no encontrado');
+        $sheet->setCellValue('C' . $fila, $pedido->user->email ?? 'Email no disponible');
+        $sheet->setCellValue('D' . $fila, $pedido->created_at->format('d/m/Y H:i'));
+        $sheet->setCellValue('E' . $fila, $pedidoProducto->producto->code ?? 'Producto eliminado');
+        $sheet->setCellValue('F' . $fila, $pedidoProducto->cantidad);
+        $sheet->setCellValue('G' . $fila, '$' . number_format($pedidoProducto->precio_unitario, 2));
+        $sheet->setCellValue('H' . $fila, '$' . number_format($pedidoProducto->cantidad * $pedidoProducto->precio_unitario, 2));
+
+        $sheet->setCellValue('I' . $fila, '$' . number_format($pedido->descuento, 2));
+        $sheet->setCellValue('J' . $fila, '$' . number_format($pedido->subtotal, 2));
+        $sheet->setCellValue('K' . $fila, '$' . number_format($pedido->iva, 2));
+        $sheet->setCellValue('L' . $fila, '$' . number_format($pedido->total, 2));
+        $sheet->setCellValue('M' . $fila, $pedido->mensaje ?? 'Sin mensaje');
+
+        // Aplicar bordes a la nueva fila
+        $sheet->getStyle('A' . $fila . ':M' . $fila)->applyFromArray([
+            'borders' => [
+                'allBorders' => [
+                    'borderStyle' => Border::BORDER_THIN,
+                ],
+            ],
+        ]);
+    }
+
+
 
     public function sendInformacion(Request $request)
     {
