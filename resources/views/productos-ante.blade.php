@@ -26,11 +26,12 @@
         </h2>
     </div>
 
-    <x-search-bar />
+    <x-search-bar :terminaciones="$terminaciones" :materiales="$materiales" :categorias="$categorias"
+        :subcategorias="$subcategorias" />
 
     <div class="w-[1200px] mx-auto grid grid-cols-4 gap-5 my-10">
         @foreach ($categorias as $categoria)
-            <a href="{{url("/productos/" . $categoria->id)}}"
+            <a href="{{route("productos.categorias", ["id" => $categoria->id])}}"
                 class="h-[350px] max-w-[288px] border flex flex-col rounded-lg shadow-sm">
                 <div class="w-full min-h-[250px] rounded-t-lg">
                     <img src="{{ $categoria->image ?? "" }}" alt="{{ $categoria->name ?? ""}}"

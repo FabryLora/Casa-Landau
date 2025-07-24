@@ -8,12 +8,14 @@ use App\Models\BannerPortada;
 use App\Models\Calidad;
 use App\Models\Categoria;
 use App\Models\Contacto;
+use App\Models\Materiales;
 use App\Models\Metadatos;
 use App\Models\Nosotros;
 use App\Models\Novedades;
 use App\Models\Producto;
 use App\Models\Slider;
 use App\Models\SubCategoria;
+use App\Models\Terminaciones;
 use App\Models\Valores;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -37,6 +39,8 @@ class HomePages extends Controller
             ->orderBy('order', 'asc')
             ->with(['imagenes', 'precio'])
             ->get();
+        $terminaciones = Terminaciones::orderBy('order', 'asc')->get();
+        $materiales = Materiales::orderBy('order', 'asc')->get();
         return view('home', [
             'sliders' => $sliders,
             'bannerPortada' => $bannerPortada,
@@ -45,6 +49,8 @@ class HomePages extends Controller
             'subcategorias' => $subcategorias,
             'productos' => $productos,
             'metadatos' => $metadatos,
+            'terminaciones' => $terminaciones,
+            'materiales' => $materiales,
         ]);
     }
 

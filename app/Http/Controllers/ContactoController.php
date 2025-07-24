@@ -59,6 +59,7 @@ class ContactoController extends Controller
             'location' => 'sometimes|nullable|string|max:255',
             'mail_info' => 'sometimes|nullable|email|max:255',
             'mail_pedidos' => 'sometimes|nullable|email|max:255',
+            'location_dos' => 'sometimes|nullable|string|max:255',
             'fb' => 'sometimes|nullable|string|max:255',
             'ig' => 'sometimes|nullable|string|max:255',
             'wp' => 'sometimes|nullable|string|max:255',

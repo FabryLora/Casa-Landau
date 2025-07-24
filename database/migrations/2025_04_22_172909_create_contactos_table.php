@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('mail_pedidos')->nullable();
             $table->string('phone')->nullable();
             $table->string('location')->nullable();
+            $table->string('location_dos')->nullable();
             $table->string('wp')->nullable();
             $table->string('fb')->nullable();
             $table->string('ig')->nullable();

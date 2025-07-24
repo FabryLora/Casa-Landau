@@ -3,6 +3,7 @@
 use App\Http\Controllers\ContactoController;
 use App\Http\Controllers\DescargarArchivo;
 use App\Http\Controllers\HomePages;
+use App\Http\Controllers\MailNewsletterController;
 use App\Http\Controllers\NovedadesController;
 use App\Http\Controllers\ProductoController;
 use App\Http\Controllers\SearchController;
@@ -23,12 +24,13 @@ Route::get('/novedades/{id}', [NovedadesController::class, 'novedadesShow'])->na
 Route::post('/contacto/sendemail', [ContactoController::class, 'sendContact'])->name('send.contact');
 
 Route::get('/productos', [ProductoController::class, 'productosAnteSala'])->name('productos');
-Route::get('/productos/{id}', [ProductoController::class, 'indexVistaPrevia'])->name('productos.categorias');
+Route::get('/productos/categorias', [ProductoController::class, 'indexVistaPrevia'])->name('productos.categorias');
 
 Route::get('/p/{codigo}', [ProductoController::class, 'show'])->name('producto');
 
 Route::get('/busqueda', [ProductoController::class, 'SearchProducts'])->name('searchproducts');
 
+Route::post('newsletterStore', [MailNewsletterController::class, 'store'])->name('newsletter.store');
 
 
 # ------------------------------------------------------------------- #

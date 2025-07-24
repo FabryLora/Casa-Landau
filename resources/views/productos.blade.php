@@ -13,7 +13,7 @@
             </div>
         </div>
 
-        <x-search-bar :categorias="$categorias" :subcategorias="$subcategorias" />
+        <x-search-bar :terminaciones="$terminaciones" :materiales="$materiales" :categoria_id="$id" :categorias="$categorias" :subcategorias="$subcategorias" :rubro_id="$rubro_id" :terminacion_id="$terminacion_id" :medida="$medida"/>
 
         <!-- Main content with sidebar and products -->
         <div class="flex flex-col lg:flex-row gap-6 max-sm:gap-4 w-[1200px] max-sm:w-full max-sm:px-4 mx-auto">
@@ -28,7 +28,7 @@
                              }">
                             <div
                                 class="flex flex-row justify-between items-center py-3 max-sm:py-2 px-2 transition-all duration-300 ease-in-out text-lg max-sm:text-base {{ $cat->id == $categoria_id ? 'font-semibold' : '' }}">
-                                <a href="{{ '/productos/' . $cat->id }}" class="block flex-1">
+                                <a href="{{ route('productos.categorias', ['id' => $cat->id])}}" class="block flex-1">
                                     {{ $cat->name }}
                                     @if ($cat->productos_count)
                                         <span
@@ -58,7 +58,7 @@
                                     x-transition:leave-start="opacity-100 transform translate-y-0"
                                     x-transition:leave-end="opacity-0 transform -translate-y-2">
                                     @foreach ($cat->subCategorias as $subCategoria)
-                                        <a href="{{ '/productos/' . $cat->id . '?rubro=' . $subCategoria->categoria->id }}"
+                                        <a href="{{ route('productos.categorias', ['id' => $cat->id, 'rubro' => $subCategoria->categoria->id ])}}"
                                             class="block pl-4 max-sm:pl-3 py-2 max-sm:py-1.5 text-[16px] max-sm:text-sm hover:bg-gray-50 transition-colors duration-200 {{ $rubro_id && $subCategoria->id == $rubro_id ? 'font-semibold bg-gray-50' : '' }}">
                                             {{ $subCategoria->name }}
                                             @if ($subCategoria->productos_count)

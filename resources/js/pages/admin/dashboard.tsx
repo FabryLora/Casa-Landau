@@ -94,6 +94,7 @@ export default function Dashboard({ children }) {
             subHref: [
                 { title: 'Banner', href: 'contacto-banner' },
                 { title: 'Contenido', href: 'contacto' },
+                { title: 'Newsletter', href: 'newsletter' },
             ],
         },
         {

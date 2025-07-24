@@ -64,14 +64,20 @@ class ProductoController extends Controller
         /* $materiales = Materiales::orderBy('order', 'asc')->get(); */
         /* $medidas = Medidas::orderBy('order', 'asc')->get(); */
         $banner = Banner::where('name', 'productos')->first();
+
+        $terminaciones = Terminaciones::orderBy('order', 'asc')->get();
+        $materiales = Materiales::orderBy('order', 'asc')->get();
+
         return view('productos-ante', [
             'categorias' => $categorias,
             'subcategorias' => $subcategorias,
             'banner' => $banner,
+            'terminaciones' => $terminaciones,
+            'materiales' => $materiales,
         ]);
     }
 
-    public function indexVistaPrevia(Request $request, $id)
+    public function indexVistaPrevia(Request $request)
     {
         // Construir query base para productos
         $query = Producto::query();
@@ -83,19 +89,19 @@ class ProductoController extends Controller
         }
 
         // Filtro por modelo/subcategoría
-        if ($request->filled('modelo_id')) {
+        if ($request->filled('rubro')) {
             $query->whereHas('subcategoria', function ($q) use ($request) {
-                $q->where('sub_categoria_id', $request->modelo_id);
+                $q->where('sub_categoria_id', $request->rubro);
             });
         }
 
         // Filtro por código
-        if ($request->filled('code')) {
-            $query->where('code', 'LIKE', '%' . $request->code . '%');
+        if ($request->filled('terminacion')) {
+            $query->where('terminacion_id', 'LIKE', '%' . $request->terminacion . '%');
         }
 
-        if ($request->filled('rubro')) {
-            $query->where('sub_categoria_id', 'LIKE', '%' . $request->rubro . '%');
+        if ($request->filled('material')) {
+            $query->where('material_id', 'LIKE', '%' . $request->material . '%');
         }
 
 
@@ -103,17 +109,23 @@ class ProductoController extends Controller
             $query->where('medida', 'LIKE', '%' . $request->medida . '%');
         }
 
-        // Filtro por descripción visible
-        if ($request->filled('desc_visible')) {
-            $query->where('desc_visible', 'LIKE', '%' . $request->desc_visible . '%')
-                ->orWhere('desc_invisible', 'LIKE', '%' . $request->desc_visible . '%');
+        /* buscar por todo */
+
+        if ($request->filled('avanzada')) {
+            $query->where(function ($q) use ($request) {
+                $q->where('name', 'LIKE', '%' . $request->avanzada . '%')
+                    ->orWhere('code', 'LIKE', '%' . $request->avanzada . '%')
+                    ->orWhere('medida', 'LIKE', '%' . $request->avanzada . '%');
+            });
         }
+
+
 
         // Aplicar ordenamiento por defecto
         $query->orderBy('order', 'asc');
 
         // Ejecutar query con paginación
-        $productos = $query->with(['categoria', 'subcategoria'])->where('categoria_id', $id)
+        $productos = $query->with(['categoria', 'subcategoria'])->where('categoria_id', $request->id)
             ->paginate(15)
             ->appends($request->query());
 
@@ -126,6 +138,8 @@ class ProductoController extends Controller
         $categorias = Categoria::with('subCategorias')->orderBy('order', 'asc')->get();
         $subcategorias = SubCategoria::orderBy('order', 'asc')->get();
         $categoria = $request->filled('id') ? Categoria::findOrFail($request->id) : null;
+        $materiales = Materiales::orderBy('order', 'asc')->get();
+        $terminaciones = Terminaciones::orderBy('order', 'asc')->get();
 
         return view('productos', [
             'categorias' => $categorias,
@@ -136,7 +150,13 @@ class ProductoController extends Controller
             'code' => $request->code,
             'rubro_id' => $request->rubro,
             'medida' => $request->medida,
-            'categoria_id' => $id
+            'categoria_id' => $request->id,
+            'terminaciones' => $terminaciones,
+            'materiales' => $materiales,
+            'terminacion_id' => $request->terminacion,
+            'material_id' => $request->material,
+            'avanzada' => $request->avanzada,
+
         ]);
     }
 
