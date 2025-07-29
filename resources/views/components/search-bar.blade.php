@@ -10,6 +10,10 @@
             medidaSeleccionada: '{{ request("medida") ?? "" }}',
             busquedaAvanzada: '{{ request("busqueda") ?? "" }}',
             subcategorias: @js($subcategorias),
+            medidaSeleccionada: '{{ request("medida") ?? "" }}',
+            minMedida: 0,
+            maxMedida: 100,
+            mostrandoTooltip: false,
 
             init() {
                 // Resetear campos dependientes cuando la categoría cambia
@@ -28,6 +32,23 @@
         }));
     });
 </script>
+
+<style>
+    .range-track {
+        position: relative;
+        height: 6px;
+        background: #DFDFDF;
+        border-radius: 3px;
+    }
+
+    .range-progress {
+        height: 100%;
+        background: #3a4a9f;
+        /* o tu color primary-orange */
+        border-radius: 3px;
+        transition: width 0.2s ease;
+    }
+</style>
 
 <div class="w-full bg-[#F5F5F5] flex justify-center items-center h-fit py-10" x-data="filtroSubcategorias">
     <form action="{{ route('productos.categorias') }}" method="GET"
@@ -92,9 +113,39 @@
             </div>
 
             <div class="flex flex-col gap-3">
-                <label for="medida">Medida</label>
-                <input id="medida" name="medida" placeholder="mm" type="text" x-model="medidaSeleccionada"
-                    value="{{ request('medida') ?? '' }}" class="h-[42px] pl-2 border rounded-lg border-[#DFDFDF]">
+                <label for="medida" class="text-[#6E7173] font-semibold text-[16px]">Medida</label>
+                <div class="relative">
+                    <!-- Track personalizado -->
+                    <div class="range-track">
+                        <div class="range-progress"
+                            :style="`width: ${(medidaSeleccionada - minMedida) / (maxMedida - minMedida) * 100}%`">
+                        </div>
+                    </div>
+                    <!-- Input range transparente encima -->
+                    <input id="medida" name="medida" type="range" :min="minMedida" :max="maxMedida"
+                        x-model="medidaSeleccionada" @mousedown="mostrandoTooltip = true"
+                        @mouseup="mostrandoTooltip = false" @touchstart="mostrandoTooltip = true"
+                        @touchend="mostrandoTooltip = false" value="{{ request('medida') ?? '' }}"
+                        class="absolute top-0 w-full h-6 opacity-0 cursor-pointer">
+                    <!-- Valor flotante - solo se muestra al interactuar -->
+                    <div x-show="mostrandoTooltip" x-transition:enter="transition ease-out duration-200"
+                        x-transition:enter-start="opacity-0 transform scale-95"
+                        x-transition:enter-end="opacity-100 transform scale-100"
+                        x-transition:leave="transition ease-in duration-150"
+                        x-transition:leave-start="opacity-100 transform scale-100"
+                        x-transition:leave-end="opacity-0 transform scale-95"
+                        class="absolute bg-gray-800 text-white px-2 py-1 rounded text-sm transform -translate-x-1/2 -translate-y-10 z-10"
+                        :style="`left: ${(medidaSeleccionada - minMedida) / (maxMedida - minMedida) * 100}%`">
+                        <span x-text="medidaSeleccionada + ' mm'"></span>
+                        <div
+                            class="w-2 h-2 bg-gray-800 transform rotate-45 absolute left-1/2 -translate-x-1/2 -bottom-1">
+                        </div>
+                    </div>
+                </div>
+                <div class="flex justify-between text-sm text-gray-500">
+                    <span x-text="minMedida + ' mm'"></span>
+                    <span x-text="maxMedida + ' mm'"></span>
+                </div>
             </div>
 
             <button type="submit" class="py-1 px-2 font-bold text-white bg-primary-orange rounded-lg self-end h-[42px]">

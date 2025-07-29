@@ -20,6 +20,7 @@ return new class extends Migration
             $table->foreignIdFor(Pedido::class, 'pedido_id')->constrained()->onDelete('cascade');
             $table->foreignIdFor(Producto::class, 'producto_id')->constrained()->onDelete('cascade');
             $table->decimal('precio_unitario', 10, 2)->default(0);
+            $table->unsignedBigInteger('cantidad_entregada')->default(0);
             $table->integer("cantidad");
             $table->timestamps();
         });

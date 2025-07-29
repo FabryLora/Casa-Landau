@@ -50,14 +50,6 @@ export default function MispedidosRow({ pedido }) {
                                     <div className="rounded-lg bg-gray-50 p-4">
                                         <h3 className="mb-3 font-semibold text-gray-900">Información del Pedido</h3>
                                         <div className="space-y-2">
-                                            <div className="flex justify-between">
-                                                <span className="text-gray-600">Tipo de Entrega:</span>
-                                                <span className="font-medium">{pedido.tipo_entrega}</span>
-                                            </div>
-                                            <div className="flex justify-between">
-                                                <span className="text-gray-600">Tipo de Pago:</span>
-                                                <span className="font-medium">{pedido.forma_pago}</span>
-                                            </div>
                                             {pedido.mensaje && (
                                                 <div className="pt-2">
                                                     <span className="text-gray-600">Mensaje:</span>
@@ -133,6 +125,9 @@ export default function MispedidosRow({ pedido }) {
                                                     <th className="px-4 py-3 text-center text-xs font-medium tracking-wider text-gray-500 uppercase">
                                                         Cantidad
                                                     </th>
+                                                    <th className="px-4 py-3 text-center text-xs font-medium tracking-wider text-gray-500 uppercase">
+                                                        Cantidad entregada
+                                                    </th>
                                                     <th className="px-4 py-3 text-right text-xs font-medium tracking-wider text-gray-500 uppercase">
                                                         Precio
                                                     </th>
@@ -147,6 +142,7 @@ export default function MispedidosRow({ pedido }) {
                                                         <td className="px-4 py-3 text-sm text-gray-900">{producto?.producto?.code}</td>
                                                         <td className="px-4 py-3 text-sm text-gray-900">{producto?.producto?.name}</td>
                                                         <td className="px-4 py-3 text-center text-sm text-gray-900">{producto.cantidad}</td>
+                                                        <td className="px-4 py-3 text-center text-sm text-gray-900">{producto.cantidad_entregada}</td>
                                                         <td className="px-4 py-3 text-right text-sm text-gray-900">
                                                             $
                                                             {Number(producto.precio_unitario).toLocaleString('es-AR', {
@@ -199,7 +195,7 @@ export default function MispedidosRow({ pedido }) {
                 </div>
                 <div className="flex items-center">#{pedido?.id}</div>
                 <div className="flex items-center">{pedido?.created_at}</div>
-                <div className="flex items-center">desc</div>
+                <div className="flex items-center">{pedido?.mensaje}</div>
                 <div className="flex items-center">{pedido?.estado?.toLowerCase() != 'entrega pendiente' ? pedido?.updated_at : 'No entregado'}</div>
 
                 <div

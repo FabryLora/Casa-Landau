@@ -1,6 +1,6 @@
 @extends('layouts.default')
 
-@section('title', 'Empresa - Autopartes TB')
+@section('title', 'Nosotros - Autopartes TB')
 
 @section('content')
     <div class="relative flex h-[250px] w-full items-end justify-center sm:h-[300px] md:h-[400px]">
@@ -27,20 +27,20 @@
     </div>
     <div
         class="mx-auto flex w-full max-w-[1200px] h-full flex-col gap-6 px-4 py-10 sm:gap-8 sm:py-16 lg:flex-row lg:gap-10 lg:px-0 lg:py-20">
-        <div class="h-full w-full py-4 lg:py-10">
+        <div class="h-full w-full ">
             <div class="flex flex-col gap-4 lg:gap-6">
                 <h2 class="text-2xl font-bold sm:text-3xl">{{ $nosotros->title ?? null }}</h2>
                 <div class="" {!! $nosotros->text ?? null !!}></div>
             </div>
         </div>
-        <div class="h-[514px] w-full ">
-            <img class="h-full w-full object-cover" src="{{ $nosotros->image ?? null }}" alt="Imagen nosotros">
+        <div class="h-[514px] w-full rounded-lg">
+            <img class="h-full w-full object-cover rounded-lg" src="{{ $nosotros->image ?? null }}" alt="Imagen nosotros">
         </div>
 
     </div>
 
-    <div className="max-w-[1200px] mx-auto flex justify-center h-[688px]">
-        <video className="w-full h-full object-cover rounded-lg" src="{{$nosotros->video ?? ""}}" controls></video>
+    <div class="w-[1200px] mx-auto flex justify-center h-[688px] my-10">
+        <video class="w-full h-full object-cover rounded-lg" src="{{$nosotros->video ?? ""}}" controls></video>
     </div>
 
 

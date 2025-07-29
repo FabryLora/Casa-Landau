@@ -110,12 +110,24 @@ class PedidoController extends Controller
 
     public function articulosPedidos(Request $request)
     {
-        $pedidos = Pedido::where('estado', '!=', 'Entregado')->orderBy('created_at', 'desc')
-            ->with(['productos.producto'])
+        $productos = PedidoProducto::whereHas('pedido', function ($query) {
+            $query->where('user_id', auth()->user()->id);
+        })
+            ->whereColumn('cantidad', '>', 'cantidad_entregada')
+            ->with(['producto.imagenes', 'producto.pedidos'])
+            ->selectRaw('
+            producto_id,
+            SUM(cantidad) as cantidad_total,
+            SUM(cantidad_entregada) as cantidad_entregada_total,
+            SUM(cantidad - cantidad_entregada) as cantidad_pendiente
+        ')
+            ->groupBy('producto_id')
             ->get();
 
+
+
         return inertia('privada/articulosPedidos', [
-            'pedidos' => $pedidos,
+            'productos' => $productos,
         ]);
     }
 

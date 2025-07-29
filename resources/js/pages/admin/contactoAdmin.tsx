@@ -15,7 +15,7 @@ export default function ContactoAdmin() {
         wp: contacto?.wp,
         fb: contacto?.fb,
         ig: contacto?.ig,
-        mail_info: contacto?.mail_info,
+
         mail_pedidos: contacto?.mail_pedidos,
     });
 
@@ -65,15 +65,15 @@ export default function ContactoAdmin() {
                         <div className="w-full">
                             <label htmlFor="mail_info" className="flex flex-row items-center gap-2 text-sm/6 font-medium text-gray-900">
                                 <FontAwesomeIcon color="#0072c6" icon={faEnvelope} size="lg" />
-                                <p>Mail {'(Informacion de pago)'}</p>
+                                <p>Mail {'(Pedidos)'} </p>
                             </label>
                             <div className="mt-2">
                                 <div className="focus-within:outline-primary-orange flex items-center rounded-md bg-white pl-3 outline outline-1 -outline-offset-1 outline-gray-300 focus-within:outline focus-within:outline-2 focus-within:-outline-offset-2">
                                     <div className="shrink-0 text-base text-gray-500 select-none sm:text-sm/6"></div>
                                     <input
-                                        value={data.mail_info}
+                                        value={data.mail_pedidos}
                                         onChange={(ev) => {
-                                            setData('mail_info', ev.target.value);
+                                            setData('mail_pedidos', ev.target.value);
                                         }}
                                         id="mail_info"
                                         name="mail_info"

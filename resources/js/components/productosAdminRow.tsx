@@ -24,7 +24,6 @@ export default function ProductosAdminRow({ producto }) {
         terminacion_id: producto?.terminacion_id,
         material_id: producto?.material_id,
         unidad_minima: producto?.unidad_minima,
-        descuento: producto?.descuento,
         id: producto?.id,
     });
 
@@ -120,9 +119,6 @@ export default function ProductosAdminRow({ producto }) {
             <td className="align-middle">{producto?.code}</td>
             <td className="align-middle">{producto?.categoria?.name}</td>
             <td className="align-middle">{producto?.subcategoria?.name}</td>
-            <td className="align-middle">
-                {producto?.descuento > 0 ? <p className="text-green-500">{producto?.descuento}%</p> : <p>Sin descuento</p>}
-            </td>
 
             <td className="flex h-[90px] flex-row items-center justify-center">
                 <Switch routeName="cambiarDestacado" id={producto?.id} status={producto?.destacado == 1} />
@@ -223,16 +219,6 @@ export default function ProductosAdminRow({ producto }) {
                                         id="unidad"
                                         value={data.unidad_minima}
                                         onChange={(e) => setData('unidad_minima', e.target.value)}
-                                    />
-
-                                    <label htmlFor="descuento">Descuento</label>
-                                    <input
-                                        className="focus:outline-primary-orange rounded-md p-2 outline outline-gray-300 focus:outline"
-                                        type="number"
-                                        name="descuento"
-                                        id="descuento"
-                                        value={data.descuento}
-                                        onChange={(e) => setData('descuento', e.target.value)}
                                     />
 
                                     <label htmlFor="categoria_id">Categoria</label>

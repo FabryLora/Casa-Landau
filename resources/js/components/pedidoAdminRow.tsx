@@ -4,6 +4,7 @@ import toast from 'react-hot-toast';
 
 export default function PedidoAdminRow({ pedido }) {
     const [pedidoView, setPedidoView] = useState(false);
+    const [cantidad, setCantidad] = useState(0);
     const modalRef = useRef(null);
 
     useEffect(() => {
@@ -29,15 +30,12 @@ export default function PedidoAdminRow({ pedido }) {
     return (
         <>
             {pedidoView && (
-                <div
-                    className="fixed top-0 left-0 z-50 flex h-screen w-screen items-center justify-center bg-black/50"
-                    onClick={() => setPedidoView(false)}
-                >
+                <div className="fixed top-0 left-0 z-50 flex h-screen w-screen items-center justify-center bg-black/50">
                     <div className="fixed inset-0 z-50 flex items-center justify-center">
                         {/* Overlay */}
 
                         {/* Modal */}
-                        <div className="relative mx-4 max-h-[90vh] w-full max-w-4xl overflow-y-auto rounded-lg bg-white shadow-xl">
+                        <div ref={modalRef} className="relative mx-4 max-h-[90vh] w-full max-w-5xl overflow-y-auto rounded-lg bg-white shadow-xl">
                             {/* Header */}
                             <div className="flex items-center justify-between border-b border-gray-200 p-6">
                                 <h2 className="text-xl font-semibold text-gray-900">Detalles del Pedido #{pedido.id}</h2>
@@ -92,14 +90,6 @@ export default function PedidoAdminRow({ pedido }) {
                                     <div className="rounded-lg bg-gray-50 p-4">
                                         <h3 className="mb-3 font-semibold text-gray-900">Información del Pedido</h3>
                                         <div className="space-y-2">
-                                            <div className="flex justify-between">
-                                                <span className="text-gray-600">Tipo de Entrega:</span>
-                                                <span className="font-medium">{pedido.tipo_entrega}</span>
-                                            </div>
-                                            <div className="flex justify-between">
-                                                <span className="text-gray-600">Tipo de Pago:</span>
-                                                <span className="font-medium">{pedido.forma_pago}</span>
-                                            </div>
                                             {pedido.mensaje && (
                                                 <div className="pt-2">
                                                     <span className="text-gray-600">Mensaje:</span>
@@ -175,11 +165,17 @@ export default function PedidoAdminRow({ pedido }) {
                                                     <th className="px-4 py-3 text-center text-xs font-medium tracking-wider text-gray-500 uppercase">
                                                         Cantidad
                                                     </th>
+                                                    <th className="px-4 py-3 text-center text-xs font-medium tracking-wider text-gray-500 uppercase">
+                                                        Cantidad Entregada
+                                                    </th>
                                                     <th className="px-4 py-3 text-right text-xs font-medium tracking-wider text-gray-500 uppercase">
                                                         Precio
                                                     </th>
                                                     <th className="px-4 py-3 text-right text-xs font-medium tracking-wider text-gray-500 uppercase">
                                                         Subtotal
+                                                    </th>
+                                                    <th className="px-4 py-3 text-center text-xs font-medium tracking-wider text-gray-500 uppercase">
+                                                        Editar Cantidad Entregada
                                                     </th>
                                                 </tr>
                                             </thead>
@@ -191,6 +187,7 @@ export default function PedidoAdminRow({ pedido }) {
                                                         <td className="px-4 py-3 text-center text-sm text-gray-900">
                                                             {producto.cantidad.toLocaleString('es-AR')}
                                                         </td>
+                                                        <td className="px-4 py-3 text-center text-sm text-gray-900">{producto.cantidad_entregada}</td>
                                                         <td className="px-4 py-3 text-right text-sm text-gray-900">
                                                             $
                                                             {Number(producto.precio_unitario).toLocaleString('es-AR', {
@@ -204,6 +201,39 @@ export default function PedidoAdminRow({ pedido }) {
                                                                 minimumFractionDigits: 2,
                                                                 maximumFractionDigits: 2,
                                                             })}
+                                                        </td>
+
+                                                        <td className="flex justify-center px-4 py-3 text-right text-sm font-medium text-gray-900">
+                                                            <div className="flex flex-row gap-4">
+                                                                <input
+                                                                    type="number"
+                                                                    defaultValue={cantidad}
+                                                                    onChange={(e) => setCantidad(Number(e.target.value))}
+                                                                    className="w-24 rounded-md border border-gray-300 px-2 py-1 text-sm"
+                                                                />
+                                                                <button
+                                                                    onClick={() => {
+                                                                        if (cantidad >= 0) {
+                                                                            router.post(
+                                                                                route('updateCantidadEntregada'),
+                                                                                {
+                                                                                    id: producto.producto_id,
+                                                                                    pedido_id: pedido.id,
+                                                                                    cantidad_entregada: cantidad,
+                                                                                },
+                                                                                {
+                                                                                    onSuccess: () => {
+                                                                                        toast.success('Cantidad entregada actualizada correctamente');
+                                                                                    },
+                                                                                },
+                                                                            );
+                                                                        }
+                                                                    }}
+                                                                    className="bg-primary-orange hover:bg-primary-orange/80 rounded-md px-2 py-1 text-sm text-white"
+                                                                >
+                                                                    Entregar
+                                                                </button>
+                                                            </div>
                                                         </td>
                                                     </tr>
                                                 ))}

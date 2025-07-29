@@ -18,7 +18,7 @@ export default function ProductosAdmin() {
         terminacion_id: '',
         material_id: '',
         unidad_minima: '',
-        descuento: '',
+
         images: [],
     });
 
@@ -221,15 +221,6 @@ export default function ProductosAdmin() {
                                             name="unidad"
                                             id="unidad"
                                             onChange={(e) => setData('unidad_minima', e.target.value)}
-                                        />
-
-                                        <label htmlFor="descuento">Descuento</label>
-                                        <input
-                                            className="focus:outline-primary-orange rounded-md p-2 outline outline-gray-300 focus:outline"
-                                            type="number"
-                                            name="descuento"
-                                            id="descuento"
-                                            onChange={(e) => setData('descuento', e.target.value)}
                                         />
 
                                         <label htmlFor="categoria_id">Categoria</label>
@@ -500,7 +491,7 @@ export default function ProductosAdmin() {
                                     <td className="text-center">CODIGO</td>
                                     <td className="text-center">CATEGORIA</td>
                                     <td className="py-2 text-center">RUBRO</td>
-                                    <td className="pl-3 text-center">DESCUENTO</td>
+
                                     <td className="text-center">DESTACADO</td>
                                     <td className="text-center">EDITAR</td>
                                 </tr>

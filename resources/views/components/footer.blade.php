@@ -5,7 +5,7 @@
         {{-- Logo y redes sociales --}}
         <div class="flex h-full flex-col items-center gap-4">
             <a href="/">
-                <img src="{{ $logos->logo_principal ?? '' }}" alt="Logo secundario"
+                <img src="{{ $logos->logo_secundario ?? '' }}" alt="Logo secundario"
                     class="max-w-[200px] sm:max-w-full" />
             </a>
 

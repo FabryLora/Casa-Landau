@@ -7,21 +7,7 @@ use Illuminate\Http\Request;
 
 class PedidoProductoController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        //
-    }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
 
     /**
      * Store a newly created resource in storage.
@@ -29,44 +15,26 @@ class PedidoProductoController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-            'pedido_id' => 'required|exists:pedidos,id',
-            'subproducto_id' => 'required|exists:sub_productos,id',
-            'cantidad' => 'required|numeric',
-            'subtotal_prod' => 'required|numeric',
+
+            'cantidad_entregada' => 'nullable|numeric',
         ]);
 
         PedidoProducto::create($data);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(PedidoProducto $pedidoProducto)
-    {
-        //
-    }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(PedidoProducto $pedidoProducto)
+    public function update(Request $request)
     {
-        //
-    }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, PedidoProducto $pedidoProducto)
-    {
-        //
-    }
+        $data = $request->validate([
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(PedidoProducto $pedidoProducto)
-    {
-        //
+            'cantidad_entregada' => 'nullable|numeric',
+        ]);
+
+        $pedidoProducto = PedidoProducto::where('pedido_id', $request->pedido_id)
+            ->where('producto_id', $request->id)
+            ->firstOrFail();
+
+        $pedidoProducto->update($data);
     }
 }

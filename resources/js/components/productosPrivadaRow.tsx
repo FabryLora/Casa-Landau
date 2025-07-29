@@ -91,7 +91,11 @@ export default function ProductosPrivadaRow({ producto, margenSwitch, margen }) 
                     $ {Number(producto?.precio?.precio).toLocaleString('es-AR', { maximumFractionDigits: 2, minimumFractionDigits: 2 })}
                 </p>
 
-                <p className="text-center text-green-500">{producto?.descuento}%</p>
+                <p className="text-right text-green-500">
+                    {user?.descuento_uno && `${user.descuento_uno}%`}
+                    {user?.descuento_dos && ` + ${user.descuento_dos}%`}
+                    {user?.descuento_tres && ` + ${user.descuento_tres}%`}
+                </p>
 
                 <p className="text-right text-sm font-medium text-gray-900">
                     ${' '}

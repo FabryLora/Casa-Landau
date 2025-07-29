@@ -30,7 +30,7 @@ export default function Footer() {
                 {/* Logo y redes sociales */}
                 <div className="flex h-full flex-col items-center gap-4">
                     <a href="/">
-                        <img src={logos?.logo_principal || ''} alt="Logo secundario" className="max-w-[200px] sm:max-w-full" />
+                        <img src={logos?.logo_secundario || ''} alt="Logo secundario" className="max-w-[200px] sm:max-w-full" />
                     </a>
 
                     <div className="flex flex-row items-center justify-center gap-4 sm:gap-2">

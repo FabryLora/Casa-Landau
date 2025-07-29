@@ -1,8 +1,11 @@
+import ArticulosPedidosRow from '@/components/articulosPedidosRow';
 import { Head, Link, usePage } from '@inertiajs/react';
 import DefaultLayout from '../defaultLayout';
 
 export default function ArticulosPedidos() {
-    const { pedidos } = usePage().props;
+    const { productos } = usePage().props;
+
+    console.log(productos);
 
     return (
         <DefaultLayout>
@@ -21,17 +24,16 @@ export default function ArticulosPedidos() {
                 </div>
                 <div className="col-span-2 grid w-full items-start">
                     <div className="w-full">
-                        <div className="grid h-[52px] grid-cols-8 items-center bg-[#F5F5F5]">
+                        <div className="grid h-[52px] grid-cols-7 items-center bg-[#F5F5F5] font-semibold">
                             <p></p>
                             <p>Codigo</p>
                             <p>Nombre</p>
-                            <p>Cantidad consolidada</p>
-                            <p>Entregados</p>
-                            <p>Pendientes</p>
-                            <p></p>
+                            <p className="text-center">Cantidad consolidada</p>
+                            <p className="text-center">Entregados</p>
+                            <p className="text-center">Pendientes</p>
                             <p></p>
                         </div>
-                        {/* {pedidos?.map((pedido) => <MispedidosRow key={pedido?.id} pedido={pedido} />)} */}
+                        {productos?.map((producto) => <ArticulosPedidosRow key={producto?.id} producto={producto} />)}
                     </div>
                 </div>
             </div>

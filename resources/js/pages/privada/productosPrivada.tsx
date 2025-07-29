@@ -172,7 +172,7 @@ export default function ProductosPrivada({ categorias, subcategorias }) {
                             <p>Terminacion</p>
                             <p className="text-center">Rubro</p>
                             <p className="text-right max-sm:hidden">Precio</p>
-                            <p className="text-center max-sm:hidden">Descuento</p>
+                            <p className="text-right max-sm:hidden">Descuento</p>
                             <p className="text-right max-sm:hidden">Subtotal</p>
                             <p className="text-center max-sm:hidden">Cantidad</p>
                             <p className="max-sm:hidden"></p>

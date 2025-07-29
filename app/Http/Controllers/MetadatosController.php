@@ -34,8 +34,8 @@ class MetadatosController extends Controller
 
         $data = $request->validate([
             'title' => 'sometimes|nullable|string|max:255',
-            'description' => 'sometimes|nullable|string|max:255',
-            'keywords' => 'sometimes|nullable|string|max:255',
+            'description' => 'sometimes|nullable|string',
+            'keywords' => 'sometimes|nullable|string',
         ]);
 
 

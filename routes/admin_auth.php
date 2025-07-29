@@ -20,6 +20,7 @@ use App\Http\Controllers\MetadatosController;
 use App\Http\Controllers\NosotrosController;
 use App\Http\Controllers\NovedadesController;
 use App\Http\Controllers\PedidoController;
+use App\Http\Controllers\PedidoProductoController;
 use App\Http\Controllers\PrivadaController;
 use App\Http\Controllers\ProductoController;
 use App\Http\Controllers\SliderController;
@@ -43,6 +44,7 @@ Route::get('/adm', [AdminAuthController::class, 'login'])->name('admin.login');
 Route::post('/adm', [AdminAuthController::class, 'authenticate'])->name('admin.authenticate');
 
 Route::middleware('auth:admin')->group(function () {
+    Route::post('updateCantidadEntregada', [PedidoProductoController::class, 'update'])->name('updateCantidadEntregada');
     Route::post('admin-logout', [AdminAuthController::class, 'logout'])->name('admin.logout');
     Route::get('admin/administradores', [AdminController::class, 'index'])->name('admin.index');
     Route::post('admin/store', [AdminController::class, 'store'])->name('admin.store');
@@ -52,7 +54,7 @@ Route::middleware('auth:admin')->group(function () {
     Route::post('admin/bannerportada', [BannerPortadaController::class, 'update'])->name('admin.bannerportada.update');
 
     Route::get('admin/nosotros', [NosotrosController::class, 'index'])->name('admin.nosotros');
-    Route::post('admin/nosotros/update', [NosotrosController::class, 'update'])->name('admin.nosotros.update');
+    Route::post('admin/nosotros/update', action: [NosotrosController::class, 'update'])->name('admin.nosotros.update');
     Route::get('admin/valores', [ValoresController::class, 'index'])->name('admin.valores');
     Route::post('admin/valores', [ValoresController::class, 'update'])->name('admin.valores.update');
     Route::get('admin/nosotros-banner', [NosotrosController::class, 'nosotrosBanner'])->name('admin.nosotros.banner');
@@ -174,6 +176,8 @@ Route::middleware('auth:admin')->group(function () {
     Route::get('admin/pedidos', [PedidoController::class, 'misPedidosAdmin'])->name('admin.pedidos');
     Route::post('admin/pedidos/update', [PedidoController::class, 'update'])->name('admin.pedidos.update');
     Route::post('cambiarEstado', [PedidoController::class, 'cambiarEstado'])->name('cambiarEstado');
+
+
 
     Route::get('admin/marcasProducto', [MarcaProductoController::class, 'index'])->name('admin.marcasProducto');
     Route::post('admin/marcasProducto', [MarcaProductoController::class, 'store'])->name('admin.marcasProducto.store');
