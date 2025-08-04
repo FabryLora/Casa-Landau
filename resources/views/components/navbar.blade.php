@@ -59,16 +59,18 @@
             @foreach(($isPrivate ? $privateLinks : $defaultLinks) as $link)
                 <a href="{{ $link['href'] }}"
                     class="text-sm hover:text-primary-orange transition-colors duration-300 text-black 
-                                                                                                                                                                                                                            {{ Request::is(ltrim($link['href'], '/')) ? 'font-bold' : '' }}">
+                                                                                                                                                                                                                                {{ Request::is(ltrim($link['href'], '/')) ? 'font-bold' : '' }}">
                     {{ $link['title'] }}
                 </a>
             @endforeach
-            <button @click="openModal('login')"
-                class="text-sm max-sm:text-xs rounded-lg border border-primary-orange font-bold  px-4 py-2 text-primary-orange max-sm:px-2 hover:bg-primary-orange hover:text-white transition duration-300">
-                <span class="max-sm:hidden">Zona Privada</span>
-                <span class="hidden max-sm:inline">Privada</span>
-            </button>
+
         </div>
+
+        <button @click="openModal('login')"
+            class="text-sm max-sm:text-xs rounded-lg border border-primary-orange font-bold  px-4 py-2 text-primary-orange max-sm:px-2 hover:bg-primary-orange hover:text-white transition duration-300">
+            <span class="max-sm:hidden">Zona Privada</span>
+            <span class="hidden max-sm:inline">Privada</span>
+        </button>
     </div>
 
     <!-- Menú móvil -->
@@ -83,7 +85,7 @@
             @foreach(($isPrivate ? $privateLinks : $defaultLinks) as $link)
                 <a href="{{ $link['href'] }}"
                     class="block px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 hover:text-primary-orange transition-colors duration-300
-                                                                                                                                                                                                                            {{ Request::is(ltrim($link['href'], '/')) ? 'font-bold bg-orange-50 text-primary-orange' : '' }}"
+                                                                                                                                                                                                                                {{ Request::is(ltrim($link['href'], '/')) ? 'font-bold bg-orange-50 text-primary-orange' : '' }}"
                     @click="mobileMenuOpen = false">
                     {{ $link['title'] }}
                 </a>

@@ -75,11 +75,7 @@ const Navbar = () => {
             {/* Main Navbar Content */}
             <div className="mx-auto flex h-full w-[1200px] items-center justify-between max-sm:h-[60px] max-sm:w-full max-sm:px-4">
                 <a href="/">
-                    <img
-                        src={scrolled ? logos?.logo_secundario : logos?.logo_principal}
-                        className="max-h-[83px] transition-all duration-300 max-sm:h-8"
-                        alt="Logo"
-                    />
+                    <img src={logos?.logo_principal} className="max-h-[83px] transition-all duration-300 max-sm:h-8" alt="Logo" />
                 </a>
 
                 {/* Desktop Menu */}
@@ -95,16 +91,15 @@ const Navbar = () => {
                             {link.title}
                         </Link>
                     ))}
-                    {window.location.pathname.includes('privada') && (
-                        <button
-                            onClick={() => setShowLogin(true)}
-                            type="button"
-                            className="border-primary-orange text-primary-orange hover:bg-primary-orange rounded-lg border px-4 py-2 text-sm font-bold transition duration-300 hover:text-white max-sm:px-2 max-sm:text-xs"
-                        >
-                            {auth?.user?.name}
-                        </button>
-                    )}
-
+                </div>
+                <div className="relative flex flex-col">
+                    <button
+                        onClick={() => setShowLogin(true)}
+                        type="button"
+                        className="border-primary-orange text-primary-orange hover:bg-primary-orange rounded-lg border px-4 py-2 text-sm font-bold transition duration-300 hover:text-white max-sm:px-2 max-sm:text-xs"
+                    >
+                        {auth?.user?.name}
+                    </button>
                     {showLogin && <div className="fixed inset-0 bg-black/50 transition-all duration-300" />}
                     {showLogin && (
                         <div
